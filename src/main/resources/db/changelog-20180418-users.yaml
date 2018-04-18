@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: gin
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+                  remarks: "用户名"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  remarks: "密码"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(50)
+                  remarks: "邮箱"
+                  constraints:
+                    nullable: true
+              - column:
+                  name: nickname
+                  type: varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+                  remarks: "昵称"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: register_time
+                  type: datetime
+                  remarks: "注册时间"
+                  constraints:
+                    nullable: false
