@@ -77,12 +77,19 @@ public class ResponseData {
   public static ResponseData serverInternalError(String developerMessage) {
     return new ResponseData(developerMessage, 500, "Server Internal Error");
   }
+
+  //系统错误信息对照表
   public static ResponseData formValidError(String message) {
     return new ResponseData(null, 601, message);
   }
   public static ResponseData idNotExistsError() {
     return new ResponseData(602, "id不存在");
   }
+
+  public static ResponseData usernameAlreadyExistsError(){
+    return new ResponseData(603,"该用户名已经存在");
+  }
+
 
 
 }

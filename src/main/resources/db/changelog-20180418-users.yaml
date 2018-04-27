@@ -36,10 +36,132 @@ databaseChangeLog:
                   type: varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
                   remarks: "昵称"
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: register_time
                   type: datetime
                   remarks: "注册时间"
+                  defaultValueDate: now()
                   constraints:
                     nullable: false
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_name
+                  type: varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+                  remarks: "角色名"
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: permission
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: permission_name
+                  type: varchar(20)
+                  remarks: "权限名"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: method
+                  type: varchar(100)
+                  remarks: "方法"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: url
+                  type: varchar(225)
+                  remarks: "url"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: remark
+                  type: varchar(225)
+                  remarks: "备注"
+                  constraints:
+                    nullable: true
+        - createTable:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: role_permission
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permission_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - modifySql:
+            append:
+              value: "ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE utf8_unicode_ci"
+
+  - changeSet:
+      id: 2
+      author: gin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_role
+            constraintName: fk_user_role_to_user
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: user
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: user_role
+            constraintName: fk_user_role_to_role
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: role
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: role_permission
+            constraintName: fk_role_permission_to_role
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: role
+        - addForeignKeyConstraint:
+            baseColumnNames: permission_id
+            baseTableName: role_permission
+            constraintName: fk_role_permission_to_permission
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: permission
+
+
+
+
+

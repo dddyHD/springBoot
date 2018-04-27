@@ -1,6 +1,8 @@
 package cn.suancloud.springBoot.util;
 
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -38,8 +40,12 @@ public class Encryption {
     }
     return null;
   }
+  public static String getbCrypt(String s){
+    return new BCryptPasswordEncoder().encode(s);
+  }
 
   public static void main(String[] args) {
     System.out.println(getSha1("admin"));
+    System.out.println(getbCrypt("123"));
   }
 }

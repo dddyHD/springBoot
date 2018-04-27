@@ -1,0 +1,5 @@
+第一阶段 初步搭好springBoot2.0 完成 mould-controller-server-Dao （已完成）
+第二阶段 整合了JPA 和 liquibase （已完成）
+第三阶段 添加表单验证、异常处理和返回的信息处理 （已完成）
+第四阶段 整合安全框架，这里采用的是 shior
+

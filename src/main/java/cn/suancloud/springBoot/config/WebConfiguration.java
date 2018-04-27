@@ -1,4 +1,4 @@
-package cn.suancloud.springBoot.filters;
+package cn.suancloud.springBoot.config;
 
 import org.apache.catalina.filters.RemoteIpFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

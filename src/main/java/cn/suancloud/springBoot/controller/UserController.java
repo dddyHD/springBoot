@@ -2,7 +2,6 @@ package cn.suancloud.springBoot.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +13,7 @@ import javax.validation.Valid;
 
 import cn.suancloud.springBoot.exception.FormException;
 import cn.suancloud.springBoot.formvalid.UserForm;
-import cn.suancloud.springBoot.mould.User;
+import cn.suancloud.springBoot.model.User;
 import cn.suancloud.springBoot.service.UserService;
 import cn.suancloud.springBoot.util.ResponseData;
 
@@ -41,7 +40,7 @@ public class UserController extends BaseController{
     ResponseData data = ResponseData.ok();
     hasErrors(result);
     if (userService.isExistsUsername(form.getUsername())){
-
+      data = ResponseData.usernameAlreadyExistsError();
     }else {
       User user  = new User();
       BeanUtils.copyProperties(form,user);

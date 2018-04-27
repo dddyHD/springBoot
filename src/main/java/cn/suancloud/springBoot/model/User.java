@@ -1,12 +1,21 @@
-package cn.suancloud.springBoot.mould;
+package cn.suancloud.springBoot.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -19,26 +28,26 @@ public class User implements Serializable {
   @Id
   @GeneratedValue
   private Long id;
-  @Column(name = "username", nullable = false, unique = true)
+  @Column(name = "username",unique = true)
   private String username;
-  @Column(name = "password", nullable = false)
+  @Column(name = "password")
   private String password;
-  @Column(name = "email", nullable = false)
+  @Column(name = "email")
   private String email;
   @Column(name = "nickname")
   private String nickname;
-  @Column(name = "register_time", nullable = false)
+  @Column(name = "register_time")
   private Date registerTime= new Date();
 
-  public User() {
-  }
+  @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+  @JoinTable(
+          name = "user_role",
+          joinColumns = @JoinColumn(name = "user_id"),
+          inverseJoinColumns = @JoinColumn(name = "role_id")
+  )
+  private List<Role> roles = new ArrayList();
 
-  public User(String username, String password, String email, String nickname, Date registerTime) {
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.nickname = nickname;
-    this.registerTime = registerTime;
+  public User() {
   }
 
   public Long getId() {
@@ -57,6 +66,7 @@ public class User implements Serializable {
     this.username = username;
   }
 
+  @JsonIgnore
   public String getPassword() {
     return password;
   }
@@ -87,5 +97,13 @@ public class User implements Serializable {
 
   public void setRegisterTime(Date registerTime) {
     this.registerTime = registerTime;
+  }
+
+  public List<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<Role> roles) {
+    this.roles = roles;
   }
 }
