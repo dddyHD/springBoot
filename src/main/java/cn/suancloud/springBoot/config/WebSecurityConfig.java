@@ -10,12 +10,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import cn.suancloud.springBoot.security.CustomUserService;
 import cn.suancloud.springBoot.security.MyFilterSecurityInterceptor;
+import cn.suancloud.springBoot.security.securityHandle.DefaultAccessDeniedHandler;
 
 
 /**
@@ -26,6 +27,12 @@ import cn.suancloud.springBoot.security.MyFilterSecurityInterceptor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
+  @Autowired
+  private AuthenticationFailureHandler authenticationFailureHandler;
+  @Autowired
+  private DefaultAccessDeniedHandler accessDeniedHandler;
+  @Autowired
+  private AuthenticationEntryPoint authenticationEntryPoint;
   @Bean
   UserDetailsService customUserService() { //注册UserDetailsService 的bean
     return new CustomUserService();
@@ -40,13 +47,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated() //任何请求,登录后可以访问
             .and()
             .formLogin()
+            .failureHandler(authenticationFailureHandler)
             .loginPage("/login")
-            .failureUrl("/login?error")
             .permitAll() //登录页面用户任意访问
             .and()
-            .logout().permitAll(); //注销行为任意访问
+            .logout()
+            .logoutUrl("/logout")
+            .permitAll(); //注销行为任意访问
+    http.exceptionHandling()
+            .accessDeniedHandler(accessDeniedHandler)
+            .authenticationEntryPoint(authenticationEntryPoint);
+    http.sessionManagement()
+            .disable();
     http.addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
-            .csrf().disable();
+            .csrf()
+            .disable();
 
 
   }

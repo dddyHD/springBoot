@@ -24,28 +24,29 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
     //decide 方法是判定是否拥有权限的决策方法
     HttpServletRequest request = ((FilterInvocation) o).getHttpRequest();
     String url,method;
-    AntPathRequestMatcher matcher;
 
+    //不拦截
+    if (matchers("/login",request)
+            || matchers("/",request)
+            || matchers("/logout",request)){
+      return;
+    }
+    //权限检查
     for (GrantedAuthority ga : authentication.getAuthorities()) {
       if (ga instanceof MyGrantedAuthority) {
         MyGrantedAuthority urlGrantedAuthority = (MyGrantedAuthority) ga;
         url = urlGrantedAuthority.getUrl();
         method = urlGrantedAuthority.getMethod();
-        matcher = new AntPathRequestMatcher(url);
-        if (matcher.matches(request)) {
+        if (matchers(url,request)) {
           //当权限表权限的method为ALL时表示拥有此路径的所有请求方式权利。
           if (method.equals(request.getMethod()) || "ALL".equals(method)) {
             return;
           }
         }
-      } else if (ga.getAuthority().equals("ROLE_ANONYMOUS")) {//未登录只允许访问 login 页面
-        matcher = new AntPathRequestMatcher("/login");
-        if (matcher.matches(request)) {
-          return;
-        }
       }
     }
-
+    //权限不足无法访问
+    throw new AccessDeniedException("Permission denied !");
   }
 
   @Override
@@ -56,5 +57,13 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
   @Override
   public boolean supports(Class<?> aClass) {
     return true;
+  }
+
+  private boolean matchers(String url, HttpServletRequest request) {
+    AntPathRequestMatcher matcher = new AntPathRequestMatcher(url);
+    if (matcher.matches(request)) {
+      return true;
+    }
+    return false;
   }
 }

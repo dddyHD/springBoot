@@ -15,6 +15,7 @@ import cn.suancloud.springBoot.exception.FormException;
 import cn.suancloud.springBoot.formvalid.UserForm;
 import cn.suancloud.springBoot.model.User;
 import cn.suancloud.springBoot.service.UserService;
+import cn.suancloud.springBoot.util.Encryption;
 import cn.suancloud.springBoot.util.ResponseData;
 
 /**

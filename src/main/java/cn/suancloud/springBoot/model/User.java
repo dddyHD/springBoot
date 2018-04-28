@@ -1,6 +1,7 @@
 package cn.suancloud.springBoot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import cn.suancloud.springBoot.util.Encryption;
 
 /**
  * Created by admin on 2018/4/16.
@@ -45,6 +48,7 @@ public class User implements Serializable {
           joinColumns = @JoinColumn(name = "user_id"),
           inverseJoinColumns = @JoinColumn(name = "role_id")
   )
+  @JsonIgnoreProperties({"users","permissions"})
   private List<Role> roles = new ArrayList();
 
   public User() {
@@ -72,7 +76,7 @@ public class User implements Serializable {
   }
 
   public void setPassword(String password) {
-    this.password = password;
+    this.password = Encryption.getbCrypt(password);
   }
 
   public String getEmail() {
