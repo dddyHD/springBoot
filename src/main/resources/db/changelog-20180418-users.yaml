@@ -15,7 +15,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: username
-                  type: varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+                  type: varchar(20)
                   remarks: "用户名"
                   constraints:
                     nullable: false
@@ -33,7 +33,7 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: nickname
-                  type: varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+                  type: varchar(50)
                   remarks: "昵称"
                   constraints:
                     nullable: true
@@ -56,7 +56,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: role_name
-                  type: varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+                  type: varchar(20)
                   remarks: "角色名"
                   constraints:
                     nullable: false
@@ -160,6 +160,82 @@ databaseChangeLog:
             onUpdate: RESTRICT
             referencedColumnNames: id
             referencedTableName: permission
+
+  - changeSet:
+      id: 3
+      author: gin
+      changes:
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: username
+              value: admin
+          - column:
+              name: password
+              value: $2a$10$MHLbXJdvpFyfsG942gLCz.aAaRI67g60orfHwd1wgRaHuNpPhCOAO # admin
+          - column:
+              name: email
+              value: 1005503403@qq.com
+          - column:
+              name: nickname
+              value: gin
+          - column:
+              name: register_time
+              value: now()
+          tableName: user
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: role_name
+              value: ROLE_ADMIN
+          tableName: role
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 1
+          - column:
+              name: permission_name
+              value: ROLE_ADMIN
+          - column:
+              name: method
+              value: ALL
+          - column:
+              name: url
+              value: /**
+          - column:
+              name: remark
+              value: root permission
+          tableName: permission
+      - insert:
+          columns:
+          - column:
+              name: user_id
+              value: 1
+          - column:
+              name: role_id
+              value: 1
+          tableName: user_role
+      - insert:
+          columns:
+          - column:
+              name: role_id
+              value: 1
+          - column:
+              name: permission_id
+              value: 1
+          tableName: role_permission
+
+
+
+
+
 
 
 

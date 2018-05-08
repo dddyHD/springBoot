@@ -46,6 +46,6 @@ public class Encryption {
 
   public static void main(String[] args) {
     System.out.println(getSha1("admin"));
-    System.out.println(getbCrypt("123"));
+    System.out.println(getbCrypt("admin"));
   }
 }
