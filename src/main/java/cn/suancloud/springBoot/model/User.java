@@ -25,13 +25,13 @@ import cn.suancloud.springBoot.util.Encryption;
  * Created by admin on 2018/4/16.
  */
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User implements Serializable {
 
   @Id
   @GeneratedValue
   private Long id;
-  @Column(name = "username",unique = true)
+  @Column(name = "username", unique = true)
   private String username;
   @Column(name = "password")
   private String password;
@@ -40,7 +40,7 @@ public class User implements Serializable {
   @Column(name = "nickname")
   private String nickname;
   @Column(name = "register_time")
-  private Date registerTime= new Date();
+  private Date registerTime = new Date();
 
   @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @JoinTable(
@@ -48,7 +48,7 @@ public class User implements Serializable {
           joinColumns = @JoinColumn(name = "user_id"),
           inverseJoinColumns = @JoinColumn(name = "role_id")
   )
-  @JsonIgnoreProperties({"users","permissions"})
+  @JsonIgnoreProperties({"users", "permissions"})
   private List<Role> roles = new ArrayList();
 
   public User() {
@@ -70,13 +70,15 @@ public class User implements Serializable {
     this.username = username;
   }
 
-  @JsonIgnore
+  // @JsonIgnore
+  //不能用反序列，因为登录
   public String getPassword() {
     return password;
   }
 
   public void setPassword(String password) {
-    this.password = Encryption.getbCrypt(password);
+    //this.password = Encryption.getbCrypt(password);
+    this.password = password;
   }
 
   public String getEmail() {

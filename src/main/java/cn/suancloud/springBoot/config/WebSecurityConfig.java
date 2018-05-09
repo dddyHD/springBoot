@@ -18,6 +18,8 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import cn.suancloud.springBoot.filter.JWTAuthenticationFilter;
+import cn.suancloud.springBoot.filter.JWTLoginFilter;
 import cn.suancloud.springBoot.security.CustomUserService;
 import cn.suancloud.springBoot.security.MyFilterSecurityInterceptor;
 import cn.suancloud.springBoot.security.securityHandle.DefaultAccessDeniedHandler;
@@ -41,14 +43,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private AuthenticationSuccessHandler authenticationSuccessHandler;
   @Autowired
   private LogoutSuccessHandler logoutSuccessHandler;
+  @Autowired
+  private CustomUserService customUserService;
 
-  @Bean
-  UserDetailsService customUserService() { //注册UserDetailsService 的bean
-    return new CustomUserService();
-  }
+//  @Bean
+//  UserDetailsService customUserService() { //注册UserDetailsService 的bean
+//    return customUserService;
+//  }
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(customUserService()).passwordEncoder(new BCryptPasswordEncoder()); //user Details Service验证
+    auth.userDetailsService(customUserService).passwordEncoder(new BCryptPasswordEncoder()); //user Details Service验证
   }
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -66,7 +70,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .logout()
             .logoutSuccessHandler(logoutSuccessHandler)
             .logoutUrl("/logout")
-            .permitAll(); //注销行为任意访问
+            .permitAll() //注销行为任意访问
+            .and()
+            .addFilter(new JWTLoginFilter(authenticationManager()))
+            .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService));
+
+
+
     http.exceptionHandling()
             .accessDeniedHandler(accessDeniedHandler)
             .authenticationEntryPoint(authenticationEntryPoint);

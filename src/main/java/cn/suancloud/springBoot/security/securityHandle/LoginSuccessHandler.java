@@ -25,12 +25,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-//    User user = (User) authentication.getPrincipal();
-//    Map map = new HashMap();
-//    map.put("token","");
-
-
-
     PrintWriter writer = response.getWriter();
     writer.write("{\"status\":200,\"message\":\"Login Success !\"}");
     writer.flush();

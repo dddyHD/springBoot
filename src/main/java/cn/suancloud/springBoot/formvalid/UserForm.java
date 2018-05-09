@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import cn.suancloud.springBoot.util.Constant;
+import cn.suancloud.springBoot.util.Encryption;
 
 /**
  * Created by admin on 2018/4/18.
@@ -46,7 +47,7 @@ public class UserForm implements Serializable {
   }
 
   public String getPassword() {
-    return password;
+    return Encryption.getbCrypt(password);
   }
 
   public void setPassword(String password) {
