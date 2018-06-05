@@ -27,7 +27,6 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 
     //不拦截
     if (matchers("/login",request)
-            || matchers("/",request)
             || matchers("/logout",request)){
       return;
     }

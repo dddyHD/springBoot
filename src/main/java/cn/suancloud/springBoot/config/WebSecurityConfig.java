@@ -72,6 +72,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .logoutUrl("/logout")
             .permitAll() //注销行为任意访问
             .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
             .addFilter(new JWTLoginFilter(authenticationManager()))
             .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService));
 
