@@ -86,8 +86,11 @@ public class ResponseData {
     return new ResponseData(602, "id不存在");
   }
 
-  public static ResponseData usernameAlreadyExistsError(){
-    return new ResponseData(603,"该用户名已经存在");
+  public static ResponseData nameAlreadyExistsError(){
+    return new ResponseData(603,"该名字已经存在");
+  }
+  public static ResponseData methodAndUrlAlreadyExistsError(){
+    return new ResponseData(604,"唯一约束出错，请检查数据！");
   }
 
 

@@ -4,17 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.suancloud.springBoot.dao.RoleDao;
-import cn.suancloud.springBoot.dao.UserDao;
 import cn.suancloud.springBoot.model.Role;
-
 import cn.suancloud.springBoot.service.RoleService;
-import cn.suancloud.springBoot.service.UserService;
 
 /**
  * Created by admin on 2018/4/16.
  */
 @Service
-public class RoleServiceImpl extends BaseServiceImpl<Role,Long> implements RoleService {
+public class RoleServiceImpl extends BaseServiceImpl<Role, Long> implements RoleService {
 
   RoleDao dao;
 
@@ -24,4 +21,13 @@ public class RoleServiceImpl extends BaseServiceImpl<Role,Long> implements RoleS
     this.dao = dao;
   }
 
+  @Override
+  public Role getRole(String role_name) {
+    return dao.getRole(role_name);
+  }
+
+  @Override
+  public boolean isExistsRoleName(String role_name) {
+    return getRole(role_name) == null ? false : true;
+  }
 }

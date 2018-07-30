@@ -61,10 +61,10 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
             .setExpiration(new Date(System.currentTimeMillis() + JWT_TTLMILLIS))
             .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
             .compact();
-    res.addHeader("Authorization", "Bearer " + token);
+    res.addHeader("J_Authorization", "Bearer " + token);
 //    返回到body中
     PrintWriter writer = res.getWriter();
-    writer.write("{\"status\":200,\"Authorization\":\""+"Bearer " + token +"\"}");
+    writer.write("{\"status\":200,\"J_Authorization\":\""+"Bearer " + token +"\"}");
     writer.flush();
   }
 

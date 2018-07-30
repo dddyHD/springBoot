@@ -1,7 +1,6 @@
 package cn.suancloud.springBoot.formvalid;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -47,7 +46,7 @@ public class UserForm implements Serializable {
   }
 
   public String getPassword() {
-    return Encryption.getbCrypt(password);
+    return Encryption.getMD5(password);
   }
 
   public void setPassword(String password) {

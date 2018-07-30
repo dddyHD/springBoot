@@ -41,7 +41,7 @@ public class HttpUtil {
       //设置返回状态码
       response.setStatus(connection.getResponseCode());
       // 定义 BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+      if (connection.getResponseCode() < 400)
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       else
         in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
@@ -96,7 +96,7 @@ public class HttpUtil {
 
       response.setStatus(connection.getResponseCode());
       // 定义BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+      if (connection.getResponseCode() < 400)
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       else
         in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
@@ -148,7 +148,7 @@ public class HttpUtil {
 
       response.setStatus(connection.getResponseCode());
       // 定义BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+      if (connection.getResponseCode() < 400 )
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       else
         in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
@@ -191,7 +191,7 @@ public class HttpUtil {
       //设置返回状态码
       response.setStatus(connection.getResponseCode());
       // 定义 BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+      if (connection.getResponseCode() < 400 )
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       else
         in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
@@ -246,7 +246,7 @@ public class HttpUtil {
 
       response.setStatus(connection.getResponseCode());
       // 定义BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+      if (connection.getResponseCode() < 400)
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       else
         in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
@@ -266,10 +266,68 @@ public class HttpUtil {
     return result;
   }
 
+  /**
+   * 模拟登录获取openshift的token
+   * ** 该登录有多次跳转
+   * @param request
+   * @param response
+   * @return
+   */
+  public static String getOpenShiftToken(HttpServletRequest request, HttpServletResponse response) {
+    String url = new StringBuffer(OPENSHIFT_URL)
+            .append("/login")
+            .toString();
+    String param = getRequestData(request);
 
+    String result = "";
+    OutputStreamWriter out = null;
+    try {
+      ignoreCertificates();
+      URL realUrl = new URL(url);
+      // 打开和URL之间的连接
+      HttpURLConnection connection = (HttpURLConnection) realUrl.openConnection();
+      // 配置原有的请求头
+      setHeader(request, connection);
+      connection.setRequestMethod("POST");
+      connection.setInstanceFollowRedirects(false);
+      // 发送POST请求必须设置如下两行
+      connection.setDoOutput(true);
+      connection.setDoInput(true);
+      // 获取URLConnection对象对应的输出流
+      out = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+      // 发送请求参数
+      out.write(param);
+      out.flush();
+
+
+      //构造跳转链接
+      String redirect_url = new StringBuffer(OPENSHIFT_URL)
+              .append("/oauth/authorize?client_id=openshift-web-console")
+              .append("&response_type=token")
+              .append("&redirect_uri=https%3A%2F%2F112.74.27.228%3A8443%2Fconsole%2Foauth")
+              .toString();
+      URL serverUrl = new URL(redirect_url);
+      HttpURLConnection conn = (HttpURLConnection) serverUrl.openConnection();
+      conn.setRequestMethod("GET");
+      conn.setRequestProperty("cookie", connection.getHeaderField("Set-Cookie"));
+      conn.connect();
+      conn.setInstanceFollowRedirects(false);
+      result = conn.getHeaderField("location");
+      logger.info("跳转地址:" + result);
+      response.setStatus(connection.getResponseCode());
+    } catch (Exception e) {
+      logger.error("openshift登录请求出现异常！" + e);
+      e.printStackTrace();
+    }
+    //使用finally块来关闭输出流、输入流
+    finally {
+      closeStream(out, null);
+    }
+    return result;
+  }
 
   /**
-   * 请求格式为Request Payload 获取参数的方法
+   * content-type 为 application/json 请求格式为Request Payload 获取参数的方法
    *
    * @return 请求参数
    */
@@ -281,10 +339,28 @@ public class HttpUtil {
       while ((len = reader.read(buff)) != -1) {
         sb.append(buff, 0, len);
       }
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return sb.toString();
+  }
+
+  /**
+   * content-type 为 application/x-www-form-urlencoded
+   */
+  private static String getRequestData(HttpServletRequest request) {
+    String param = "";
+    Enumeration<String> paramNames = request.getParameterNames();
+    for (Enumeration e = paramNames; e.hasMoreElements(); ) {
+      String paramName = e.nextElement().toString();
+      param = new StringBuffer(param)
+              .append(paramName)
+              .append("=")
+              .append(request.getParameter(paramName))
+              .append("&")
+              .toString();
+    }
+    return param.substring(0, param.length() - 1);
   }
 
   /**
@@ -298,11 +374,9 @@ public class HttpUtil {
     for (Enumeration e = headerNames; e.hasMoreElements(); ) {
       String thisName = e.nextElement().toString();
       String thisValue = request.getHeader(thisName);
-      //java 的请求头Authorization会干扰平台的认证
-      if (!(thisName.equals("Authorization") || thisName.equals("authorization")))
+      //跳过java 的请求头J_Authorization
+      if (!thisName.equals("J_Authorization"))
         connection.setRequestProperty(thisName, thisValue);
-      else
-        connection.setRequestProperty("authorization", "Bearer MzCTCllMsPpuS_c2E9ksKxPiW-twGdp183XfJ3eTFaY");
       logger.debug(thisName + "----------->" + thisValue);
     }
   }
@@ -330,10 +404,10 @@ public class HttpUtil {
 
   /**
    * 从HttpServletRequest 中构造出请求路径
-   * @param request
+   *
    * @return openshift请求路径
    */
-  private static String getUrl(HttpServletRequest request){
+  private static String getUrl(HttpServletRequest request) {
     return new StringBuilder(OPENSHIFT_URL)
             .append(request.getRequestURI())
             .append("?")

@@ -19,6 +19,7 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     PrintWriter writer = response.getWriter();
     writer.write("{\"status\":200,\"message\":\"logout!\"}");
+    // TODO: 2018/7/19 注销openshift token
     writer.flush();
   }
 }

@@ -15,7 +15,6 @@ import cn.suancloud.springBoot.exception.FormException;
 import cn.suancloud.springBoot.formvalid.UserForm;
 import cn.suancloud.springBoot.model.User;
 import cn.suancloud.springBoot.service.UserService;
-import cn.suancloud.springBoot.util.Encryption;
 import cn.suancloud.springBoot.util.ResponseData;
 
 /**
@@ -29,19 +28,19 @@ public class UserController extends BaseController{
   @Autowired
   UserService userService;
 
-  @GetMapping("/")
+  @GetMapping
   public ResponseData list(){
     ResponseData data = ResponseData.ok();
     data.getData().put("list",userService.findAll());
     return data;
   }
 
-  @PostMapping("/")
+  @PostMapping
   public ResponseData register(@Valid @RequestBody UserForm form, BindingResult result) throws FormException {
     ResponseData data = ResponseData.ok();
     hasErrors(result);
     if (userService.isExistsUsername(form.getUsername())){
-      data = ResponseData.usernameAlreadyExistsError();
+      data = ResponseData.nameAlreadyExistsError();
     }else {
       User user  = new User();
       BeanUtils.copyProperties(form,user);

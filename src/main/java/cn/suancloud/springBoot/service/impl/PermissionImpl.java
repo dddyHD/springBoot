@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.suancloud.springBoot.dao.PermissionDao;
-import cn.suancloud.springBoot.dao.RoleDao;
 import cn.suancloud.springBoot.model.Permission;
-import cn.suancloud.springBoot.model.Role;
 import cn.suancloud.springBoot.service.PermissionService;
-import cn.suancloud.springBoot.service.RoleService;
 
 /**
  * Created by admin on 2018/4/16.
@@ -24,4 +21,12 @@ public class PermissionImpl extends BaseServiceImpl<Permission,Long> implements 
     this.dao = dao;
   }
 
+  public Permission findByName(String permission_name){
+    return dao.findByName(permission_name);
+  }
+
+  @Override
+  public boolean isExistsPermissionName(String permission_name) {
+    return findByName(permission_name)==null ? false : true;
+  }
 }

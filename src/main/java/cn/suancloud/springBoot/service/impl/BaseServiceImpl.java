@@ -32,7 +32,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 
   @Override
   public T findOne(ID id) {
-    return (T) dao.findById(id);
+    return dao.findById(id).get();
   }
 
   @Override

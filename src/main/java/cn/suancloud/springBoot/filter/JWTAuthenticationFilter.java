@@ -6,7 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -32,7 +31,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-    String header = request.getHeader("Authorization");
+    String header = request.getHeader("J_Authorization");
     UsernamePasswordAuthenticationToken authentication=null;
     if (header == null || !header.startsWith("Bearer ")) {
       SecurityContextHolder.getContext().setAuthentication(null);
@@ -52,7 +51,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
   }
 
   private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request){
-    String token = request.getHeader("Authorization");
+    String token = request.getHeader("J_Authorization");
     if (token != null) {
       // parse the token.
       String user = Jwts.parser()

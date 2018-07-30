@@ -2,7 +2,6 @@ package cn.suancloud.springBoot.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,7 +33,8 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
       List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
       for (Permission permission : permissions) {
         if (permission != null && permission.getPermission_name() != null) {
-          GrantedAuthority grantedAuthority = new MyGrantedAuthority(permission.getUrl(), permission.getMethod());
+          GrantedAuthority grantedAuthority = new MyGrantedAuthority(permission.getUrl(),
+                  permission.getMethod(), permission.getExcept());
           grantedAuthorities.add(grantedAuthority);
         }
       }

@@ -23,12 +23,23 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
   public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
     //decide 方法是判定是否拥有权限的决策方法
     HttpServletRequest request = ((FilterInvocation) o).getHttpRequest();
-    String url,method;
+    String url, method;
 
     //不拦截
-    if (matchers("/login",request)
-            || matchers("/logout",request)){
+    if (matchers("/login", request) || matchers("/logout", request)) {
       return;
+    }
+    //权限检查(反向)
+    for (GrantedAuthority ga : authentication.getAuthorities()) {
+      if (ga instanceof MyGrantedAuthority) {
+        MyGrantedAuthority urlGrantedAuthority = (MyGrantedAuthority) ga;
+        url = urlGrantedAuthority.getUrl();
+        method = urlGrantedAuthority.getMethod();
+        if (urlGrantedAuthority.isExcept())//不予许访问的资源
+          if (matchers(url, request))
+            if (method.equals(request.getMethod()) || "ALL".equals(method))
+              throw new AccessDeniedException("Permission denied !");
+      }
     }
     //权限检查
     for (GrantedAuthority ga : authentication.getAuthorities()) {
@@ -36,12 +47,10 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
         MyGrantedAuthority urlGrantedAuthority = (MyGrantedAuthority) ga;
         url = urlGrantedAuthority.getUrl();
         method = urlGrantedAuthority.getMethod();
-        if (matchers(url,request)) {
+        if (matchers(url, request))
           //当权限表权限的method为ALL时表示拥有此路径的所有请求方式权利。
-          if (method.equals(request.getMethod()) || "ALL".equals(method)) {
+          if (method.equals(request.getMethod()) || "ALL".equals(method))
             return;
-          }
-        }
       }
     }
     //权限不足无法访问

@@ -13,14 +13,14 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Encryption {
   // Sha1 加密规则
-  public static String getSha1(String str) {
+  public static String getMD5(String str) {
     if (null == str || 0 == str.length()) {
       return null;
     }
     char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'a', 'b', 'c', 'd', 'e', 'f'};
     try {
-      MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
+      MessageDigest mdTemp = MessageDigest.getInstance("MD5");
       mdTemp.update(str.getBytes("UTF-8"));
 
       byte[] md = mdTemp.digest();
@@ -40,12 +40,13 @@ public class Encryption {
     }
     return null;
   }
-  public static String getbCrypt(String s){
+
+  public static String getBCrypt(String s){
     return new BCryptPasswordEncoder().encode(s);
   }
 
   public static void main(String[] args) {
-    System.out.println(getSha1("admin"));
-    System.out.println(getbCrypt("admin"));
+    System.out.println(getMD5("admin"));
+    System.out.println(getBCrypt("admin"));
   }
 }

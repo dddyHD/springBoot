@@ -9,5 +9,6 @@ public abstract class Constant {
   public static final String ID_CARDS = "(^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}[0-9Xx]$)";
   public static final String EMAIL_REGEX = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}$";
   public static final String JWT_SECRET = "SpringBoot";
-  public static final Long JWT_TTLMILLIS = Long.valueOf(1000*60*60*24);
+  public static final Long JWT_TTLMILLIS = Long.valueOf(1000 * 60 * 60 * 24);
+  public static final String[] METHOD_TYPE = {"ALL", "GET", "POST", "PUT", "PATCH"};
 }

@@ -1,6 +1,5 @@
 package cn.suancloud.springBoot.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -13,13 +12,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import cn.suancloud.springBoot.util.Encryption;
 
 /**
  * Created by admin on 2018/4/16.
@@ -29,7 +27,7 @@ import cn.suancloud.springBoot.util.Encryption;
 public class User implements Serializable {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column(name = "username", unique = true)
   private String username;
@@ -58,6 +56,7 @@ public class User implements Serializable {
     this.username = username;
     this.password = password;
   }
+
 
   public Long getId() {
     return id;
