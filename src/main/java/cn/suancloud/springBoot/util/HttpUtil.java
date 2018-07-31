@@ -40,15 +40,8 @@ public class HttpUtil {
       connection.connect();
       //设置返回状态码
       response.setStatus(connection.getResponseCode());
-      // 定义 BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() < 400)
-        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      else
-        in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-      String line;
-      while ((line = in.readLine()) != null) {
-        result += line;
-      }
+      //读取返回的数据流
+      result=readData(connection,in);
     } catch (Exception e) {
       logger.error("发送GET请求出现异常！" + e);
       e.printStackTrace();
@@ -95,15 +88,8 @@ public class HttpUtil {
       out.flush();
 
       response.setStatus(connection.getResponseCode());
-      // 定义BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() < 400)
-        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      else
-        in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-      String line;
-      while ((line = in.readLine()) != null) {
-        result += line;
-      }
+      //读取返回的数据流
+      result=readData(connection,in);
     } catch (Exception e) {
       logger.error("发送 POST 请求出现异常！" + e);
       e.printStackTrace();
@@ -147,15 +133,8 @@ public class HttpUtil {
       out.flush();
 
       response.setStatus(connection.getResponseCode());
-      // 定义BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() < 400 )
-        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      else
-        in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-      String line;
-      while ((line = in.readLine()) != null) {
-        result += line;
-      }
+      //读取返回的数据流
+      result=readData(connection,in);
     } catch (Exception e) {
       System.out.println();
       logger.error("发送 PUT 请求出现异常！" + e);
@@ -190,15 +169,8 @@ public class HttpUtil {
       connection.connect();
       //设置返回状态码
       response.setStatus(connection.getResponseCode());
-      // 定义 BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() < 400 )
-        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      else
-        in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-      String line;
-      while ((line = in.readLine()) != null) {
-        result += line;
-      }
+      //读取返回的数据流
+      result=readData(connection,in);
     } catch (Exception e) {
       logger.error("发送DELETE请求出现异常！" + e);
       e.printStackTrace();
@@ -245,15 +217,8 @@ public class HttpUtil {
       out.flush();
 
       response.setStatus(connection.getResponseCode());
-      // 定义BufferedReader输入流来读取URL的响应
-      if (connection.getResponseCode() < 400)
-        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      else
-        in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-      String line;
-      while ((line = in.readLine()) != null) {
-        result += line;
-      }
+      //读取返回的数据流
+      result=readData(connection,in);
     } catch (Exception e) {
       System.out.println();
       logger.error("发送 PATCH 请求出现异常！" + e);
@@ -312,7 +277,7 @@ public class HttpUtil {
       conn.setRequestProperty("cookie", connection.getHeaderField("Set-Cookie"));
       conn.connect();
       conn.setInstanceFollowRedirects(false);
-      result = conn.getHeaderField("location");
+      result = StringUtil.substring(conn.getHeaderField("location"),"access_token=(.*?)&");
       logger.info("跳转地址:" + result);
       response.setStatus(connection.getResponseCode());
     } catch (Exception e) {
@@ -413,5 +378,19 @@ public class HttpUtil {
             .append("?")
             .append(request.getQueryString())
             .toString();
+  }
+
+  private static String readData(HttpURLConnection connection,BufferedReader in) throws IOException {
+    String result = "";
+    // 定义 BufferedReader输入流来读取URL的响应
+    if (connection.getResponseCode() < 400)
+      in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    else
+      in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+    String line;
+    while ((line = in.readLine()) != null) {
+      result += line;
+    }
+    return result;
   }
 }

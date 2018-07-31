@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.suancloud.springBoot.security.CustomUserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 
@@ -43,6 +44,9 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
     }catch (MalformedJwtException e){
       logger.warn("JWT string has a digest/signature, but the header does not reference a valid " +
               "signature algorithm.");
+    }catch (ExpiredJwtException ex){
+      //token过期
+      logger.warn("token 过期"+ex.getMessage());
     }
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -59,8 +63,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
               .parseClaimsJws(token.replace("Bearer ", ""))
               .getBody()
               .getSubject();
-
       if (user != null) {
+        request.setAttribute("current_user",user);
         return new UsernamePasswordAuthenticationToken(user, null,customUserService
                 .loadUserByUsername(user).getAuthorities());
       }

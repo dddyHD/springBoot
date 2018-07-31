@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: gin
+      changes:
+        - createTable:
+            tableName: log
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(20)
+                  remarks: "操作者"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: url
+                  type: varchar(255)
+                  remarks: "访问路径"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: method
+                  type: varchar(20)
+                  remarks: "方法类型"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: describes
+                  type: varchar(200)
+                  remarks: "描述"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: operation_time
+                  type: datetime
+                  remarks: "操作时间"
+                  defaultValueDate: now()
+                  constraints:
+                    nullable: false
+        - modifySql:
+            append:
+              value: "ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE utf8_unicode_ci"
+

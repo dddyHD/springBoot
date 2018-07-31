@@ -188,7 +188,7 @@ databaseChangeLog:
               value: admin
           - column:
               name: password
-              value: 21232f297a57a5a743894a0e4a801fc3 # md5 admin
+              value: e6e061838856bf47e1de730719fb2609 # md5 admin
           - column:
               name: email
               value: 1005503403@qq.com

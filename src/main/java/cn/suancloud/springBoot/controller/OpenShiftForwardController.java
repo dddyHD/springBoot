@@ -23,9 +23,11 @@ import javax.servlet.http.HttpServletResponse;
 import cn.suancloud.springBoot.model.Role;
 import cn.suancloud.springBoot.model.User;
 import cn.suancloud.springBoot.model.openshift.OSUser;
+import cn.suancloud.springBoot.service.LogService;
 import cn.suancloud.springBoot.service.RoleService;
 import cn.suancloud.springBoot.service.UserService;
 
+import static cn.suancloud.springBoot.log.HandleLog.saveLog;
 import static cn.suancloud.springBoot.util.HttpUtil.getOpenShiftToken;
 import static cn.suancloud.springBoot.util.HttpUtil.sendDelete;
 import static cn.suancloud.springBoot.util.HttpUtil.sendGet;
@@ -33,6 +35,9 @@ import static cn.suancloud.springBoot.util.HttpUtil.sendPatch;
 import static cn.suancloud.springBoot.util.HttpUtil.sendPost;
 import static cn.suancloud.springBoot.util.HttpUtil.sendPut;
 
+/**
+ * openshift 请求转发器 openshif 用户模块与java用户模块数据统一
+ */
 @RestController
 public class OpenShiftForwardController extends BaseController {
   protected static Logger logger = LoggerFactory.getLogger(OpenShiftForwardController.class);
@@ -41,6 +46,8 @@ public class OpenShiftForwardController extends BaseController {
   UserService userService;
   @Autowired
   RoleService roleService;
+  @Autowired
+  LogService logService;
 
   @GetMapping("/oapi/**")
   public Object oapi_get(HttpServletRequest request, HttpServletResponse response) {
@@ -69,9 +76,22 @@ public class OpenShiftForwardController extends BaseController {
 
   @PostMapping("/openshift_login")
   public Object get_openshift_token(HttpServletRequest request, HttpServletResponse response) {
+    saveLog(logService,request,"");
     return getOpenShiftToken(request, response);
   }
-
+  @DeleteMapping("/oapi/v1/oauthaccesstokens/{token}")
+  public Object openshift_logout(HttpServletRequest request, HttpServletResponse response,
+                                 @PathVariable String token){
+    saveLog(logService,request,"");
+    return sendDelete(request,response);
+  }
+  /**
+   *  用户处理 GET PUT PATCH DELETE
+   * @param request
+   * @param response
+   * @param username
+   * @return
+   */
   @RequestMapping("/oapi/v1/users/{username}")
   public Object operationUsers(HttpServletRequest request, HttpServletResponse response,
                                @PathVariable("username") String username) {
@@ -87,7 +107,8 @@ public class OpenShiftForwardController extends BaseController {
         user.setNickname(openshift_user.getFullName());
         user.setPassword(openshift_user.getPassword());
         userService.save(user);
-        logger.info("修改用户信息成功!");
+        saveLog(logService,request,user.getUsername());
+        logger.info("修改用户信息!");
       }
     } else if (method.equals("PATCH")) {
       result = sendPatch(request, response);
@@ -96,12 +117,19 @@ public class OpenShiftForwardController extends BaseController {
       if (response.getStatus() < 400) {
         User user = userService.getUser(username);
         userService.delete(user.getId());
+        saveLog(logService,request,user.getUsername());
         logger.info("删除用户:" + username);
       }
     }
     return result;
   }
 
+  /**
+   * 用户处理 POST 添加用户
+   * @param request
+   * @param response
+   * @return
+   */
   @PostMapping("/oapi/v1/users")
   public Object addUser(HttpServletRequest request, HttpServletResponse response) {
     //添加用户
@@ -116,7 +144,9 @@ public class OpenShiftForwardController extends BaseController {
       user.setNickname(openshift_user.getFullName());
       user.setRoles(roles);
       userService.save(user);
-      logger.info("新增用户成功!");
+
+      saveLog(logService,request,user.getUsername());
+      logger.info("新增用户"+user.getUsername());
     }
     return result;
   }

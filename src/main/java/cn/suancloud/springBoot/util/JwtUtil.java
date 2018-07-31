@@ -59,7 +59,7 @@ public class JwtUtil {
     map.put("username", "gin");
     System.out.println(generateToken(map));
 
-    System.out.println(getClaimsFromToken("eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MjU4MzAzNjAsInVzZXJuYW1lIjoiZ2luIn0.VCz7OBP10aA2IXmn2Uiqqh2CqWUJBLaU7_0Ix4Azz_sd1C3ZNcRqV4-hlXyYxxEfS-eWSPPyc8iO3Tai_6H9-Q"));
+    System.out.println(getClaimsFromToken("eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImdpbiJ9.N1cbxxvX1-P5N5KL9ME5XZYZNRsWEtzzHITqbbAT3v8kh720VA4fIg4O6ovpmGqeiQYrPvh0KSXaRYoTLsI1_A"));
 
   }
 
