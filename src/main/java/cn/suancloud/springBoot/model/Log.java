@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.servlet.http.HttpServletRequest;
 
 @Entity
 @Table(name = "log")
@@ -30,20 +29,6 @@ public class Log implements Serializable {
   private Date operationTime = new Date();
 
   public Log() {
-  }
-
-  public Log(String username, String url, String method, String describe) {
-    this.username = username;
-    this.url = url;
-    this.method = method;
-    this.describes = describe;
-  }
-
-  public Log(HttpServletRequest request, String describe) {
-    this.username = request.getAttribute("current_user").toString();
-    this.url = request.getRequestURI();
-    this.method = request.getMethod();
-    this.describes = describe;
   }
 
   public Long getId() {

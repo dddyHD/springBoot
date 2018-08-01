@@ -10,6 +10,9 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.suancloud.springBoot.util.ResponseData;
+
 /**
  * Created by admin on 2018/5/8.
  */
@@ -18,7 +21,8 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
   @Override
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     PrintWriter writer = response.getWriter();
-    writer.write("{\"status\":200,\"message\":\"logout!\"}");
+    ResponseData data = ResponseData.ok();
+    writer.write(data.toJsonString());
     // TODO: 2018/7/19 注销openshift token
     writer.flush();
   }

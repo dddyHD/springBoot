@@ -19,11 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.suancloud.springBoot.model.User;
+import cn.suancloud.springBoot.util.ResponseData;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import static cn.suancloud.springBoot.util.Constant.JWT_SECRET;
 import static cn.suancloud.springBoot.util.Constant.JWT_TTLMILLIS;
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
 
 /**
@@ -70,7 +72,19 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
     res.addHeader("J_Authorization", "Bearer " + token);
 //    返回到body中
     PrintWriter writer = res.getWriter();
-    writer.write("{\"status\":200,\"J_Authorization\":\""+"Bearer " + token +"\"}");
+    ResponseData data = ResponseData.ok();
+    data.getData().put("J_Authorization","Bearer "+token);
+    writer.write(data.toJsonString());
+    writer.flush();
+  }
+  // 用户登录失败 用户名或者密码误
+  protected void unsuccessfulAuthentication(HttpServletRequest req,
+                                            HttpServletResponse res,
+                                            AuthenticationException failed) throws IOException {
+    PrintWriter writer = res.getWriter();
+    ResponseData data = ResponseData.badRequest();
+    res.setStatus(SC_BAD_REQUEST);
+    writer.write(data.toJsonString());
     writer.flush();
   }
 

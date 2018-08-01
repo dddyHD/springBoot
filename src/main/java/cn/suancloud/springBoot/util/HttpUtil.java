@@ -41,7 +41,7 @@ public class HttpUtil {
       //设置返回状态码
       response.setStatus(connection.getResponseCode());
       //读取返回的数据流
-      result=readData(connection,in);
+      result = readData(connection, in);
     } catch (Exception e) {
       logger.error("发送GET请求出现异常！" + e);
       e.printStackTrace();
@@ -89,7 +89,7 @@ public class HttpUtil {
 
       response.setStatus(connection.getResponseCode());
       //读取返回的数据流
-      result=readData(connection,in);
+      result = readData(connection, in);
     } catch (Exception e) {
       logger.error("发送 POST 请求出现异常！" + e);
       e.printStackTrace();
@@ -134,7 +134,7 @@ public class HttpUtil {
 
       response.setStatus(connection.getResponseCode());
       //读取返回的数据流
-      result=readData(connection,in);
+      result = readData(connection, in);
     } catch (Exception e) {
       System.out.println();
       logger.error("发送 PUT 请求出现异常！" + e);
@@ -170,7 +170,7 @@ public class HttpUtil {
       //设置返回状态码
       response.setStatus(connection.getResponseCode());
       //读取返回的数据流
-      result=readData(connection,in);
+      result = readData(connection, in);
     } catch (Exception e) {
       logger.error("发送DELETE请求出现异常！" + e);
       e.printStackTrace();
@@ -218,7 +218,7 @@ public class HttpUtil {
 
       response.setStatus(connection.getResponseCode());
       //读取返回的数据流
-      result=readData(connection,in);
+      result = readData(connection, in);
     } catch (Exception e) {
       System.out.println();
       logger.error("发送 PATCH 请求出现异常！" + e);
@@ -232,11 +232,7 @@ public class HttpUtil {
   }
 
   /**
-   * 模拟登录获取openshift的token
-   * ** 该登录有多次跳转
-   * @param request
-   * @param response
-   * @return
+   * 模拟登录获取openshift的token ** 该登录有多次跳转
    */
   public static String getOpenShiftToken(HttpServletRequest request, HttpServletResponse response) {
     String url = new StringBuffer(OPENSHIFT_URL)
@@ -277,8 +273,8 @@ public class HttpUtil {
       conn.setRequestProperty("cookie", connection.getHeaderField("Set-Cookie"));
       conn.connect();
       conn.setInstanceFollowRedirects(false);
-      result = StringUtil.substring(conn.getHeaderField("location"),"access_token=(.*?)&");
-      logger.info("跳转地址:" + result);
+      result = "Bearer " + StringUtil.substring(conn.getHeaderField("location"), "access_token=(.*?)&");
+      logger.info("获取平台token" + result);
       response.setStatus(connection.getResponseCode());
     } catch (Exception e) {
       logger.error("openshift登录请求出现异常！" + e);
@@ -380,7 +376,7 @@ public class HttpUtil {
             .toString();
   }
 
-  private static String readData(HttpURLConnection connection,BufferedReader in) throws IOException {
+  private static String readData(HttpURLConnection connection, BufferedReader in) throws IOException {
     String result = "";
     // 定义 BufferedReader输入流来读取URL的响应
     if (connection.getResponseCode() < 400)

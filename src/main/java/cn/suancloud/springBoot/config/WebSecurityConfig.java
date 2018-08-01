@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import cn.suancloud.springBoot.filter.JWTAuthenticationFilter;
@@ -31,13 +29,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
   @Autowired
-  private AuthenticationFailureHandler authenticationFailureHandler;
-  @Autowired
   private DefaultAccessDeniedHandler accessDeniedHandler;
   @Autowired
   private AuthenticationEntryPoint authenticationEntryPoint;
-  @Autowired
-  private AuthenticationSuccessHandler authenticationSuccessHandler;
   @Autowired
   private LogoutSuccessHandler logoutSuccessHandler;
   @Autowired
@@ -62,8 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated() //任何请求,登录后可以访问
             .and()
             .formLogin()
-            .failureHandler(authenticationFailureHandler)
-            .successHandler(authenticationSuccessHandler)
             .loginPage("/login")
             .permitAll() //登录页面用户任意访问
             .and()

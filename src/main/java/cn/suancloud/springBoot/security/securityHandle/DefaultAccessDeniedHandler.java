@@ -7,23 +7,25 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.suancloud.springBoot.util.ResponseData;
 
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 
 /**
  * Created by admin on 2017/7/14.
- * 用户权限不足无法访问资源处理
+ * 用户权限不足无法访问资源处理 403
  */
 @Service
 public class DefaultAccessDeniedHandler implements AccessDeniedHandler {
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
-          throws IOException, ServletException {
+          throws IOException {
     PrintWriter writer = response.getWriter();
+    ResponseData data = ResponseData.forbidden();
     response.sendError(SC_FORBIDDEN);
-    writer.write("{\"status\":403,\"message\":\"Forbidden!\"}");
+    writer.write(data.toJsonString());
     writer.flush();
   }
 }

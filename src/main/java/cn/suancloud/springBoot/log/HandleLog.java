@@ -41,10 +41,14 @@ public class HandleLog {
 
 
   public static void saveLog(LogService logService, HttpServletRequest request, String lastMsg) {
-    String describe = getMsg(request.getParameter("logType"), lastMsg);
+    String logType = request.getParameter("logType");
+    if (StringUtils.isEmpty(logType))
+      return;
+    String describe = getMsg(logType, lastMsg);
     if (StringUtils.isEmpty(describe))
       return;
     Log log = new Log();
+    log.setUsername(request.getAttribute("current_user").toString());
     log.setUrl(request.getRequestURI());
     log.setMethod(request.getMethod());
     log.setDescribe(describe);

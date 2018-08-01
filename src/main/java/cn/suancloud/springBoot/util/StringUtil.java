@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 public class StringUtil {
 
   /**
-   *  通过真正表达式截取字符串
+   * 通过真正表达式截取字符串
+   *
    * @param str 源数据
    * @param reg 正则表达式
    * @return 如果源数据或者截取到的为"" 返回原来的数据

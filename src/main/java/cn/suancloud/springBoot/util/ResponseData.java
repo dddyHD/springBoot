@@ -1,11 +1,12 @@
 package cn.suancloud.springBoot.util;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by teruo on 2017/8/11.
- * restful response object.
+ * Created by teruo on 2017/8/11. restful response object.
  */
 public class ResponseData {
   private final String developerMessage;
@@ -50,6 +51,10 @@ public class ResponseData {
     this.status = status;
   }
 
+  public String toJsonString() {
+    return JSONObject.toJSONString(this);
+  }
+
   public static ResponseData ok() {
     return new ResponseData(200, "success");
   }
@@ -82,17 +87,18 @@ public class ResponseData {
   public static ResponseData formValidError(String message) {
     return new ResponseData(null, 601, message);
   }
+
   public static ResponseData idNotExistsError() {
     return new ResponseData(602, "id不存在");
   }
 
-  public static ResponseData nameAlreadyExistsError(){
-    return new ResponseData(603,"该名字已经存在");
-  }
-  public static ResponseData methodAndUrlAlreadyExistsError(){
-    return new ResponseData(604,"唯一约束出错，请检查数据！");
+  public static ResponseData nameAlreadyExistsError() {
+    return new ResponseData(603, "该名字已经存在");
   }
 
+  public static ResponseData methodAndUrlAlreadyExistsError() {
+    return new ResponseData(604, "唯一约束出错，请检查数据！");
+  }
 
 
 }

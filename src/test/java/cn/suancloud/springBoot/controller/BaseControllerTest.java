@@ -1,4 +1,4 @@
-package cn.suancloud.springBoot;
+package cn.suancloud.springBoot.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,20 +17,21 @@ import cn.suancloud.springBoot.util.ResponseData;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-/**
- * Created by admin on 2018/5/9.
- */
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
 public abstract class BaseControllerTest {
   @Autowired
-  protected MockMvc mvc;
+  protected MockMvc mockMvc;
   @Autowired
   protected ObjectMapper objectMapper;
   protected String token;
+
+  protected interface CustomChecker {
+    void check(ResponseData data) throws Exception;
+  }
+  protected abstract String getUrlPrefix();
 
   protected String writeAsString(Object object) {
     try {
@@ -41,13 +42,13 @@ public abstract class BaseControllerTest {
     return null;
   }
 
-  protected void login(String username ,String password) throws Exception {
+  protected void doJavaJwtLogin(String username,String password) throws Exception{
     token = objectMapper.readValue(
-            mvc.perform(
+            mockMvc.perform(
                     post("/login").contentType(MediaType.APPLICATION_JSON)
-                            .content(writeAsString(new User(username, password)))
+                            .content(writeAsString(new User(username,password)))
             ).andReturn().getResponse().getContentAsString(),
             ResponseData.class
-    ).getData().get("token").toString();
+    ).getData().get("J_Authorization").toString();
   }
 }

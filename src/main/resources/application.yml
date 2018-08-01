@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+
+spring:
+  profiles:
+    active: @spring.active@  # 分区配置
+  jackson:
+    time-zone: GMT+8
+  liquibase:
+    change-log: classpath:db/changelog-master.yaml
+    check-change-log-location: false
+
+log:
+  path: D:/Users/admin/IdeaProjects/springBoot/zc-logs
+
+
+---
+
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3306/zc_dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&createDatabaseIfNotExist=true
+    username: root
+    password:
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3306/zc_test?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&createDatabaseIfNotExist=true
+    username: root
+    password:
+
+---
+
+spring:
+  profiles: produce
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3306/zc_produce?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&createDatabaseIfNotExist=true
+    username: root
+    password:
+
