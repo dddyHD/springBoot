@@ -61,7 +61,7 @@ public class PermissionController extends BaseController {
       try {
         permissionService.save(permission);
       } catch (DataIntegrityViolationException e) {
-        return data.methodAndUrlAlreadyExistsError();
+        return data.uniqueConstraintError();
       }
     }
     return data;
@@ -77,7 +77,7 @@ public class PermissionController extends BaseController {
     try {
       permissionService.save(permission);
     } catch (DataIntegrityViolationException e) {
-      return data.methodAndUrlAlreadyExistsError();
+      return data.uniqueConstraintError();
     }
     return data;
   }

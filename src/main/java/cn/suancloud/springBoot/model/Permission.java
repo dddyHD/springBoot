@@ -40,7 +40,9 @@ public class Permission implements Serializable {
 
   public Permission() {
   }
-
+  public Permission(Long id) {
+    this.id=id;
+  }
   public Long getId() {
     return id;
   }

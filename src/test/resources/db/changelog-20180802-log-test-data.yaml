@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1003
+      author: gin
+      changes:
+        - insert:
+            columns:
+            - column:
+                name: id
+                value: 1
+            - column:
+                name: username
+                value: admin
+            - column:
+                name: url
+                value: /role
+            - column:
+                name: method
+                value: POST
+            - column:
+                name: describes
+                value: 添加角色
+            - column:
+                name: operation_time
+                value: now()
+            tableName: log
+        - insert:
+            columns:
+            - column:
+                name: id
+                value: 2
+            - column:
+                name: username
+                value: admin
+            - column:
+                name: url
+                value: /role
+            - column:
+                name: method
+                value: GET
+            - column:
+                name: describes
+                value: 获取角色信息
+            - column:
+                name: operation_time
+                value: now()
+            tableName: log

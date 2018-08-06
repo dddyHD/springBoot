@@ -1,0 +1,75 @@
+# 初始的用户-角色-权限数据
+databaseChangeLog:
+  - changeSet:
+        id: 1001
+        author: gin
+        changes:
+        - insert:
+            columns:
+            - column:
+                name: id
+                value: 1
+            - column:
+                name: username
+                value: admin
+            - column:
+                name: password
+                value: e6e061838856bf47e1de730719fb2609 # md5 admin@123
+            - column:
+                name: email
+                value: 1005503403@qq.com
+            - column:
+                name: nickname
+                value: gin
+            - column:
+                name: register_time
+                value: now()
+            tableName: user
+        - insert:
+            columns:
+            - column:
+                name: id
+                value: 1
+            - column:
+                name: role_name
+                value: admin
+            tableName: role
+        - insert:
+            columns:
+            - column:
+                name: id
+                value: 1
+            - column:
+                name: permission_name
+                value: all
+            - column:
+                name: method
+                value: ALL
+            - column:
+                name: except
+                value: 0
+            - column:
+                name: url
+                value: /**
+            - column:
+                name: remark
+                value: root permission
+            tableName: permission
+        - insert:
+            columns:
+            - column:
+                name: user_id
+                value: 1
+            - column:
+                name: role_id
+                value: 1
+            tableName: user_role
+        - insert:
+            columns:
+            - column:
+                name: role_id
+                value: 1
+            - column:
+                name: permission_id
+                value: 1
+            tableName: role_permission

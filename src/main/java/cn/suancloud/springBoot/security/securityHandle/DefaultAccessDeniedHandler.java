@@ -24,7 +24,7 @@ public class DefaultAccessDeniedHandler implements AccessDeniedHandler {
           throws IOException {
     PrintWriter writer = response.getWriter();
     ResponseData data = ResponseData.forbidden();
-    response.sendError(SC_FORBIDDEN);
+    response.setStatus(SC_FORBIDDEN);
     writer.write(data.toJsonString());
     writer.flush();
   }

@@ -1,14 +1,17 @@
 package cn.suancloud.springBoot.model.openshift;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Metadata implements Serializable {
   private String name;
   private String selfLink;
   private String uid;
   private String resourceVersion;
   private String creationTimestamp;
-
+  private Annotations annotations;
   public Metadata() {
   }
 
@@ -59,5 +62,13 @@ public class Metadata implements Serializable {
 
   public void setCreationTimestamp(String creationTimestamp) {
     this.creationTimestamp = creationTimestamp;
+  }
+
+  public Annotations getAnnotations() {
+    return annotations;
+  }
+
+  public void setAnnotations(Annotations annotations) {
+    this.annotations = annotations;
   }
 }

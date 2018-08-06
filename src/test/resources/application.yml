@@ -8,7 +8,7 @@ spring:
   jackson:
     time-zone: GMT+8
   liquibase:
-    change-log: classpath:db/changelog-master.yaml
+    change-log: classpath:db/changelog-master-test.yaml
     check-change-log-location: false
 
 log:

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.suancloud.springBoot.model.Role;
 import cn.suancloud.springBoot.model.User;
-import cn.suancloud.springBoot.model.openshift.OSUser;
+import cn.suancloud.springBoot.model.openshift.OSResponseData;
 import cn.suancloud.springBoot.service.LogService;
 import cn.suancloud.springBoot.service.RoleService;
 import cn.suancloud.springBoot.service.UserService;
@@ -100,7 +100,7 @@ public class OpenShiftForwardController extends BaseController {
     } else if (method.equals("PUT")) {
       result = sendPut(request, response);
       if (response.getStatus() < 400) {
-        OSUser openshift_user = (OSUser) JSONObject.parseObject(result.toString(), OSUser.class);
+        OSResponseData openshift_user = (OSResponseData) JSONObject.parseObject(result.toString(), OSResponseData.class);
         User user = userService.getUser(openshift_user.getMetadata().getName());
         user.setNickname(openshift_user.getFullName());
         user.setPassword(openshift_user.getPassword());
@@ -130,7 +130,7 @@ public class OpenShiftForwardController extends BaseController {
     //添加用户
     Object result = sendPost(request, response);
     if (response.getStatus() < 400) {
-      OSUser openshift_user = (OSUser) JSONObject.parseObject(result.toString(), OSUser.class);
+      OSResponseData openshift_user = (OSResponseData) JSONObject.parseObject(result.toString(), OSResponseData.class);
       User user = new User();
       List<Role> roles = new ArrayList<>();
       roles.add(roleService.getRole(request.getParameter("role")));

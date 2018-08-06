@@ -1,10 +1,6 @@
 databaseChangeLog:
 # 结构
   - include:
-      file: db/changelog-20180418-users.yaml
+      file: db/changelog-master-struct.yaml
   - include:
-      file: db/changelog-20180730-log.yaml
-
-# 数据
-  - include:
-      file: db/changelog-20180418-users-data.yaml
+      file: db/changelog-master-data.yaml

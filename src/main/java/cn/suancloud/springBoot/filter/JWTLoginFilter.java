@@ -2,6 +2,8 @@ package cn.suancloud.springBoot.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +34,7 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
  * Created by admin on 2018/5/9.
  */
 public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
+  protected static Logger logger = LoggerFactory.getLogger(JWTLoginFilter.class);
   private AuthenticationManager authenticationManager;
 
   public JWTLoginFilter(AuthenticationManager authenticationManager) {
@@ -53,7 +56,9 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                       new ArrayList<>())
       );
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      logger.info("用户登录请求的参数错误");
+      UserAndPasswordError(req, res);
+      return null;
     }
   }
 
@@ -71,17 +76,29 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
             .compact();
     res.addHeader("J_Authorization", "Bearer " + token);
 //    返回到body中
+    logger.info("获取token值");
     PrintWriter writer = res.getWriter();
     ResponseData data = ResponseData.ok();
-    data.getData().put("J_Authorization","Bearer "+token);
+    data.getData().put("J_Authorization", "Bearer " + token);
     writer.write(data.toJsonString());
     writer.flush();
   }
+
   // 用户登录失败 用户名或者密码误
   protected void unsuccessfulAuthentication(HttpServletRequest req,
                                             HttpServletResponse res,
-                                            AuthenticationException failed) throws IOException {
-    PrintWriter writer = res.getWriter();
+                                            AuthenticationException failed) {
+    logger.info("用户名或者密码错误");
+    UserAndPasswordError(req, res);
+  }
+
+  private void UserAndPasswordError(HttpServletRequest req, HttpServletResponse res) {
+    PrintWriter writer = null;
+    try {
+      writer = res.getWriter();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     ResponseData data = ResponseData.badRequest();
     res.setStatus(SC_BAD_REQUEST);
     writer.write(data.toJsonString());

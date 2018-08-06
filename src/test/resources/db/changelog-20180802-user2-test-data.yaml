@@ -1,0 +1,203 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1002
+      author: gin
+      changes:
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 2
+          - column:
+              name: username
+              value: get
+          - column:
+              name: password
+              value: e6e061838856bf47e1de730719fb2609 # md5 admin@123
+          - column:
+              name: email
+              value: 110@qq.com
+          - column:
+              name: nickname
+              value: get
+          - column:
+              name: register_time
+              value: now()
+          tableName: user
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 3
+          - column:
+              name: username
+              value: notget
+          - column:
+              name: password
+              value: e6e061838856bf47e1de730719fb2609 # md5 admin
+          - column:
+              name: email
+              value: 119@qq.com
+          - column:
+              name: nickname
+              value: notget
+          - column:
+              name: register_time
+              value: now()
+          tableName: user
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 2
+          - column:
+              name: role_name
+              value: get
+          tableName: role
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 3
+          - column:
+              name: role_name
+              value: notget
+          tableName: role
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 2
+          - column:
+              name: permission_name
+              value: GET_permission
+          - column:
+              name: method
+              value: GET
+          - column:
+              name: except
+              value: 0
+          - column:
+              name: url
+              value: /**
+          - column:
+              name: remark
+              value: GET  permission
+          tableName: permission
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 3
+          - column:
+              name: permission_name
+              value: POST_permission
+          - column:
+              name: method
+              value: POST
+          - column:
+              name: except
+              value: 0
+          - column:
+              name: url
+              value: /**
+          - column:
+              name: remark
+              value: POST permission
+          tableName: permission
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 4
+          - column:
+              name: permission_name
+              value: PUT_permission
+          - column:
+              name: method
+              value: PUT
+          - column:
+              name: except
+              value: 0
+          - column:
+              name: url
+              value: /**
+          - column:
+              name: remark
+              value: PUT permission
+          tableName: permission
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 5
+          - column:
+              name: permission_name
+              value: DELETE_permission
+          - column:
+              name: method
+              value: DELETE
+          - column:
+              name: except
+              value: 0
+          - column:
+              name: url
+              value: /**
+          - column:
+              name: remark
+              value: DELETE permission
+          tableName: permission
+      - insert:
+          columns:
+          - column:
+              name: user_id
+              value: 2
+          - column:
+              name: role_id
+              value: 2
+          tableName: user_role
+      - insert:
+          columns:
+          - column:
+              name: user_id
+              value: 3
+          - column:
+              name: role_id
+              value: 3
+          tableName: user_role
+      - insert:
+          columns:
+          - column:
+              name: role_id
+              value: 2
+          - column:
+              name: permission_id
+              value: 2
+          tableName: role_permission
+      - insert:
+          columns:
+          - column:
+              name: role_id
+              value: 3
+          - column:
+              name: permission_id
+              value: 3
+          tableName: role_permission
+      - insert:
+          columns:
+          - column:
+              name: role_id
+              value: 3
+          - column:
+              name: permission_id
+              value: 4
+          tableName: role_permission
+      - insert:
+          columns:
+          - column:
+              name: role_id
+              value: 3
+          - column:
+              name: permission_id
+              value: 5
+          tableName: role_permission

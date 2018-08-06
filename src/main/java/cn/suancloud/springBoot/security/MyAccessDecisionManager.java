@@ -1,5 +1,7 @@
 package cn.suancloud.springBoot.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 public class MyAccessDecisionManager implements AccessDecisionManager {
   @Override
   public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
+    Logger logger = LoggerFactory.getLogger(MyAccessDecisionManager.class);
     //decide 方法是判定是否拥有权限的决策方法
     HttpServletRequest request = ((FilterInvocation) o).getHttpRequest();
     String url, method;
@@ -54,6 +57,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
       }
     }
     //权限不足无法访问
+    logger.warn("权限不足 无法访问");
     throw new AccessDeniedException("Permission denied !");
   }
 

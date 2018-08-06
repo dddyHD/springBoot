@@ -1,3 +1,9 @@
 databaseChangeLog:
   - include:
-      file: db/changelog-master.yaml
+      file: db/changelog-master-struct.yaml
+  - include:
+      file: db/changelog-20180802-user-test-data.yaml
+  - include:
+      file: db/changelog-20180802-user2-test-data.yaml
+  - include:
+      file: db/changelog-20180802-log-test-data.yaml

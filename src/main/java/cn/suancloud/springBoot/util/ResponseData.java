@@ -1,6 +1,7 @@
 package cn.suancloud.springBoot.util;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class ResponseData {
   }
 
   public String toJsonString() {
-    return JSONObject.toJSONString(this);
+    return JSONObject.toJSONString(this ,SerializerFeature.WriteMapNullValue);
   }
 
   public static ResponseData ok() {
@@ -87,7 +88,9 @@ public class ResponseData {
   public static ResponseData formValidError(String message) {
     return new ResponseData(null, 601, message);
   }
-
+  public static ResponseData formValidError() {
+    return new ResponseData(null, 601,null);
+  }
   public static ResponseData idNotExistsError() {
     return new ResponseData(602, "id不存在");
   }
@@ -96,7 +99,7 @@ public class ResponseData {
     return new ResponseData(603, "该名字已经存在");
   }
 
-  public static ResponseData methodAndUrlAlreadyExistsError() {
+  public static ResponseData uniqueConstraintError() {
     return new ResponseData(604, "唯一约束出错，请检查数据！");
   }
 

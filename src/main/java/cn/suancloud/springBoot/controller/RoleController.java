@@ -68,7 +68,7 @@ public class RoleController extends BaseController {
     try {
       roleService.save(role);
     } catch (DataIntegrityViolationException e) {
-      return data.methodAndUrlAlreadyExistsError();
+      return data.uniqueConstraintError();
     }
     return data;
 
