@@ -1,4 +1,4 @@
-package cn.suancloud.springBoot.controller;
+package cn.suancloud.springBoot.controller.system;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import cn.suancloud.springBoot.controller.BaseController;
 import cn.suancloud.springBoot.exception.FormException;
 import cn.suancloud.springBoot.formvalid.UserForm;
 import cn.suancloud.springBoot.model.User;
@@ -23,7 +24,7 @@ import cn.suancloud.springBoot.util.ResponseData;
 
 @RestController
 @RequestMapping("/user")
-public class UserController extends BaseController{
+public class UserController extends BaseController {
 
   @Autowired
   UserService userService;

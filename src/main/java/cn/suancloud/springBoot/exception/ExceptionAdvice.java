@@ -5,16 +5,27 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import cn.suancloud.springBoot.util.ResponseData;
+import io.fabric8.kubernetes.api.model.Status;
+import io.fabric8.kubernetes.client.KubernetesClientException;
 
 
 /**
- * Created by teruo on 2018/1/31.
- *  捕捉全局异常
+ * Created by teruo on 2018/1/31. 捕捉全局异常
  */
 @RestControllerAdvice
 public class ExceptionAdvice {
+
+  @ExceptionHandler(KubernetesClientException.class)
+  public Status ErrorHandler(HttpServletRequest req, HttpServletResponse res,
+                             KubernetesClientException e) {
+    res.setStatus(e.getStatus().getCode());
+    return e.getStatus();
+  }
+
+
   @ExceptionHandler(Exception.class)
   public ResponseData defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
     ResponseData data;

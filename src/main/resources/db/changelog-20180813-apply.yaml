@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: gin
+      changes:
+        - createTable:
+            tableName: apply
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: applicant
+                  type: varchar(20)
+                  remarks: "申请人"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: project
+                  type: varchar(100)
+                  remarks: "申请加入的项目"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: approver
+                  type: varchar(20)
+                  remarks: "审批人"
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_agree
+                  type: tinyint(1)
+                  remarks: "1 为同意，0 为不同意，null 为未审批，"
+                  constraints:
+                    nullable: true
+              - column:
+                  name: application_time
+                  type: datetime
+                  remarks: "申请时间"
+                  defaultValueDate: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: approval_time
+                  type: datetime
+                  remarks: "审批时间"
+                  constraints:
+                    nullable: true
+              - column:
+                  name: remark
+                  type: varchar(255)
+                  remarks: "备注"
+                  constraints:
+                    nullable: true
+        - modifySql:
+            append:
+              value: "ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE utf8_unicode_ci"
+

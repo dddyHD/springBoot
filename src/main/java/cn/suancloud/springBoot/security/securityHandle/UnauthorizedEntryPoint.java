@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.suancloud.springBoot.util.ResponseData;
 
-import static org.apache.commons.httpclient.HttpStatus.SC_UNAUTHORIZED;
+import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 
 /**
  * Created by admin on 2017/7/10. 未登录的处理 401

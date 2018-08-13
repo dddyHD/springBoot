@@ -1,4 +1,4 @@
-package cn.suancloud.springBoot.controller;
+package cn.suancloud.springBoot.controller.system;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.suancloud.springBoot.controller.BaseController;
 import cn.suancloud.springBoot.service.LogService;
 import cn.suancloud.springBoot.util.ResponseData;
 

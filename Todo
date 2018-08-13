@@ -1,0 +1,15 @@
+现在有两种方案    第一种就是转发   第二种就是采用fabric8io/kubernetes-client 重写api
+
+优缺点：    开发速度快       开发需要重写api的接口 耗时比较长
+            用户同步性不好   采用ldap安全扩展性好 需要耗费开发时间
+
+
+综上所述 老接口统一采用java反向代理，新接口采用fabric8io模拟
+         要解决websocket问题
+
+登录采用的是 ladp 这个要注意我这边有几个问题
+1、我这边用户系统如何与它对接
+2、我这边需要个超级用户的的账号和密码 保存在哪里？ getAdminOClient
+3、因为要模拟登录openshift后台 账号密码保存是否要明文？ getOClient
+
+
