@@ -12,6 +12,8 @@ import cn.suancloud.springBoot.model.Apply;
 public interface ApplyDao extends CrudRepository<Apply,Long> {
   @Query("select a from Apply a")
   Page<Apply> getPageApply(Pageable pageable);
-  @Query("from Apply where applicant=?1 and isAgree = false ")
+  @Query("from Apply where applicant=?1 and isAgree = null and status=true ")
   List<Apply> getApplying(String applicant);
+  @Query("from Apply where applicant=?1 and project=?2 and isAgree = null and status = true")
+  Apply isApplying(String applicant,String project);
 }

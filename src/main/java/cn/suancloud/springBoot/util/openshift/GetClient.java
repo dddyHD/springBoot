@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.ConfigBuilder;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.openshift.api.model.RoleBinding;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftConfig;
@@ -43,13 +42,8 @@ public class GetClient {
   }
 
   public static void main(String[] args) {
-    OpenShiftClient client = getAdminOClient();
-    RoleBinding roleBinding = client.roleBindings().inNamespace("suntek").withName("admin").get();
-    System.out.println(roleBinding);
-//    String token = (client.oAuthAccessTokens().list().getItems().get(0)).getMetadata().getName();
-//    for (OAuthAccessToken authAccessToken : client.oAuthAccessTokens().list().getItems()) {
-//      client.oAuthAccessTokens().delete(authAccessToken);
-//    }
+    OpenShiftClient client = getOClient();
+    System.out.println(client.namespaces().withName("aa").get());
     client.close();
   }
 

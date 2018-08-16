@@ -1,17 +1,27 @@
 package cn.suancloud.springBoot.controller.japi;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import cn.suancloud.springBoot.controller.BaseController;
+import cn.suancloud.springBoot.exception.FormException;
+import cn.suancloud.springBoot.formvalid.ProjectForm;
+import cn.suancloud.springBoot.model.Apply;
 import cn.suancloud.springBoot.service.ApplyService;
 import cn.suancloud.springBoot.util.ResponseData;
 import io.fabric8.kubernetes.api.model.ObjectReference;
+import io.fabric8.openshift.api.model.DoneableRoleBinding;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 import static cn.suancloud.springBoot.util.openshift.GetClient.getAdminOClient;
@@ -19,13 +29,14 @@ import static cn.suancloud.springBoot.util.openshift.GetClient.getOClient;
 
 @RestController
 @RequestMapping("/japi/v1/projects")
-public class ProjectController {
+public class ProjectController extends BaseController {
 
   @Autowired
   ApplyService applyService;
+
   //所有项目
   @GetMapping("/all")
-  public Object allProjectList(){
+  public Object allProjectList() {
     OpenShiftClient oSClient = getAdminOClient();
     Object result = oSClient.projects().list();
     oSClient.close();
@@ -34,15 +45,16 @@ public class ProjectController {
 
   //当前用户的的项目
   @GetMapping("/self")
-  public Object selfProjectList(){
+  public Object selfProjectList() {
     OpenShiftClient oSClient = getOClient();
     Object result = oSClient.projects().list();
     oSClient.close();
     return result;
   }
+
   //当前用户正在申请的项目
   @GetMapping("/apply")
-  public Object selfApplyProjectList(HttpServletRequest request){
+  public Object selfApplyProjectList(HttpServletRequest request) {
     ResponseData data = ResponseData.ok();
     data.getData().put("applyingList",
             applyService.getApplying(request.getAttribute("current_user").toString()));
@@ -50,26 +62,74 @@ public class ProjectController {
   }
 
   /**
+   * 订阅同意操作 project 申请的项目名, role 用户要添加的角色 ,kind 有User和Group两种 ,name用户名
    *
-   * @param project 申请的项目名
-   * @param role 用户要添加的角色
-   * @param kind 有User和Group两种
-   * @param name 用户名
    * @return http status 200 和修改完成的 roleBindings
    */
-  @PutMapping("/{project}/{role}/{kind}/{name}")
-  public Object approve(@PathVariable String project,@PathVariable String role,
-                        @PathVariable String kind,@PathVariable String name){
-    //admin client get admin role
-    OpenShiftClient oSClient = getAdminOClient();
-    // add user to role
-    ObjectReference objectReference = new ObjectReference();
-    objectReference.setName(kind);
-    objectReference.setName(name);
-    // send out
-    Object result = oSClient.roleBindings().inNamespace(project).withName(role)
-            .edit().addToSubjects(objectReference);
-    return result;
+  @PutMapping("/subscribe")
+  public Object subscribe(@Valid @RequestBody ProjectForm form, BindingResult result,
+                          HttpServletRequest request) throws FormException {
+    hasErrors(result);
+    return operation(form, request);
+  }
+
+  @PutMapping("/unsubscribe")
+  public Object unsubscribe(@Valid @RequestBody ProjectForm form, BindingResult result,
+                            HttpServletRequest request) throws FormException {
+    hasErrors(result);
+    return operation(form, request);
+  }
+
+  @PutMapping("/disagree/{id}")
+  public ResponseData disapprove(@PathVariable Long id, HttpServletRequest request) {
+    String approver = request.getAttribute("current_user").toString();
+    ResponseData data = ResponseData.ok();
+    Apply apply = applyService.findOne(id);
+    apply.setAgree(false);
+    apply.setApprover(approver);
+    apply.setApprovalTime(new Date());
+    applyService.save(apply);
+    return data;
+  }
+
+  public ResponseData operation(ProjectForm form, HttpServletRequest request) {
+    ResponseData data = ResponseData.ok();
+    Apply apply = applyService.findOne(form.getId());
+    if (apply.getProject().equals(form.getProject())
+            && apply.getApplicant().equals(form.getName())
+            && apply.getAgree() == null) {
+      //admin client get admin role
+      OpenShiftClient oSClient = getAdminOClient();
+      // add user to role
+      ObjectReference objectReference = new ObjectReference();
+      objectReference.setKind(form.getKind());
+      objectReference.setName(form.getName());
+      // send out
+      DoneableRoleBinding roleBinding;
+      if (request.getRequestURI().contains("subscribe")) {//订阅
+        roleBinding = oSClient.roleBindings().inNamespace(form.getProject())
+                .withName(form.getRole()).edit().addToSubjects(objectReference);
+        if (form.getKind().equals("User"))
+          roleBinding.addToUserNames(form.getName()).done();
+        else
+          roleBinding.addToGroupNames(form.getName()).done();
+      } else {//退订
+        roleBinding = oSClient.roleBindings().inNamespace(form.getProject()).withName(form.getRole())
+                .edit().removeFromSubjects(objectReference);
+        if (form.getKind().equals("User"))
+          roleBinding.removeFromUserNames(form.getName()).done();
+        else
+          roleBinding.removeFromGroupNames(form.getName());
+      }
+      oSClient.close();
+      apply.setApprover(request.getAttribute("current_user").toString());
+      apply.setApprovalTime(new Date());
+      apply.setAgree(true);
+      applyService.save(apply);
+    } else {
+      data = ResponseData.badRequest();
+    }
+    return data;
   }
 
 }

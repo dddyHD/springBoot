@@ -20,14 +20,20 @@ public class Apply implements Serializable {
   private String applicant;
   @Column(name = "project")
   private String project;
+  @Column(name = "type")
+  private String type;
   @Column(name = "approver")
   private String approver;
   @Column(name = "is_agree")
-  private boolean isAgree;
+  private Boolean isAgree;
+  @Column(name = "status")
+  private Boolean status;
   @Column(name = "application_time")
-  private Date applicationTime;
+  private Date applicationTime = new Date();
   @Column(name = "approval_time")
   private Date approvalTime;
+  @Column(name ="reason")
+  private String reason;
   @Column(name = "remark")
   private String remark;
 
@@ -56,6 +62,14 @@ public class Apply implements Serializable {
     this.project = project;
   }
 
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
   public String getApprover() {
     return approver;
   }
@@ -64,11 +78,11 @@ public class Apply implements Serializable {
     this.approver = approver;
   }
 
-  public boolean isAgree() {
+  public Boolean getAgree() {
     return isAgree;
   }
 
-  public void setAgree(boolean agree) {
+  public void setAgree(Boolean agree) {
     isAgree = agree;
   }
 
@@ -88,11 +102,27 @@ public class Apply implements Serializable {
     this.approvalTime = approvalTime;
   }
 
+  public String getReason() {
+    return reason;
+  }
+
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
+
   public String getRemark() {
     return remark;
   }
 
   public void setRemark(String remark) {
     this.remark = remark;
+  }
+
+  public Boolean getStatus() {
+    return status;
+  }
+
+  public void setStatus(Boolean status) {
+    this.status = status;
   }
 }

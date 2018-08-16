@@ -102,6 +102,18 @@ public class ResponseData {
   public static ResponseData uniqueConstraintError() {
     return new ResponseData(604, "唯一约束出错，请检查数据！");
   }
+  public static ResponseData alreadyApply () {
+    return new ResponseData(605, "您申请的项目，暂未审批，待管理员审批后再申请！");
+  }
+  public static ResponseData projectAlreadyOwn () {
+    return new ResponseData(606, "您已经拥有该项目的权限，请不要重复申请！");
+  }
+  public static ResponseData projectNotExist () {
+    return new ResponseData(607, "项目不存在！");
+  }
+  public static ResponseData projectNotOwn () {
+    return new ResponseData(608, "您未拥有该项目，无法退订！");
+  }
 
 
 }

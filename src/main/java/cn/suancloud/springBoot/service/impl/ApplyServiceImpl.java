@@ -25,18 +25,23 @@ public class ApplyServiceImpl extends BaseServiceImpl<Apply, Long> implements Ap
     this.dao = dao;
   }
 
-  public Map<String,Object> getPageApply(int page,int size){
+  public Map<String, Object> getPageApply(int page, int size) {
     Map map = new HashMap();
     Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "id");
     Page<Apply> applyPage = dao.getPageApply(pageable);
-    map.put("applyList",applyPage.getContent());
-    map.put("total",applyPage.getTotalPages());
+    map.put("applyList", applyPage.getContent());
+    map.put("total", applyPage.getTotalPages());
     return map;
   }
 
   @Override
   public List<Apply> getApplying(String applicant) {
     return dao.getApplying(applicant);
+  }
+
+  @Override
+  public boolean isApplying(String applicant, String project) {
+    return dao.isApplying(applicant, project) != null ? true : false;
   }
 
 
