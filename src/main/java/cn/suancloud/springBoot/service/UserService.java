@@ -8,4 +8,5 @@ import cn.suancloud.springBoot.model.User;
 public interface UserService extends BaseService<User,Long>{
   boolean isExistsUsername(String username);
   User getUser(String username);
+  void delete(String username);
 }

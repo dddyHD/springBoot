@@ -114,6 +114,8 @@ public class ResponseData {
   public static ResponseData projectNotOwn () {
     return new ResponseData(608, "您未拥有该项目，无法退订！");
   }
-
+  public static ResponseData addUserError () {
+    return new ResponseData(609, "添加用户到LDAP失败，请联系管理员！");
+  }
 
 }

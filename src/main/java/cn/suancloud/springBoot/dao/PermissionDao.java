@@ -13,10 +13,11 @@ import cn.suancloud.springBoot.model.Permission;
  */
 @Repository
 public interface PermissionDao extends CrudRepository<Permission, Long> {
-  @Query(value = "SELECT DISTINCT p.* FROM user u LEFT JOIN user_role ur on ur.user_id=u.id " +
-          "LEFT JOIN role r on ur.role_id=ur.role_id " +
-          "LEFT JOIN role_permission rp on rp.role_id=rp.permission_id " +
-          "LEFT JOIN permission p on rp.permission_id=u.id;",
+  @Query(value = "SELECT DISTINCT p.* FROM user u " +
+          "LEFT JOIN user_role ur on ur.user_id=u.id " +
+          "LEFT JOIN role r on r.id=ur.role_id " +
+          "LEFT JOIN role_permission rp on rp.role_id=r.id " +
+          "LEFT JOIN permission p on rp.permission_id=p.id where u.id=?;",
           nativeQuery = true
   )
   List<Permission> findByUserId(Long userId);

@@ -11,7 +11,7 @@ import cn.suancloud.springBoot.service.UserService;
  * Created by admin on 2018/4/16.
  */
 @Service
-public class UserServiceImpl extends BaseServiceImpl<User,Long> implements UserService{
+public class UserServiceImpl extends BaseServiceImpl<User, Long> implements UserService {
 
   UserDao dao;
 
@@ -26,8 +26,15 @@ public class UserServiceImpl extends BaseServiceImpl<User,Long> implements UserS
     return dao.findByUsername(username) != null;
   }
 
+
+
   @Override
   public User getUser(String username) {
     return dao.findByUsername(username);
+  }
+
+  @Override
+  public void delete(String username) {
+    dao.delete(dao.findByUsername(username));
   }
 }

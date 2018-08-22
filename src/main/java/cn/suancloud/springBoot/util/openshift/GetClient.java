@@ -9,12 +9,14 @@ import io.fabric8.openshift.client.OpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftConfig;
 import io.fabric8.openshift.client.OpenShiftConfigBuilder;
 
+import static cn.suancloud.springBoot.util.Constant.*;
+
 public class GetClient {
 
 
   public static KubernetesClient getKClient() {
     Config config = new ConfigBuilder()
-            .withMasterUrl("https://112.74.27.228:8443")
+            .withMasterUrl(OPENSHIFT_URL)
             .withUsername("admin")
             .withPassword("admin@123")
             .withTrustCerts(true)
@@ -24,8 +26,8 @@ public class GetClient {
 
   public static OpenShiftClient getOClient() {
     OpenShiftConfig shiftConfig = new OpenShiftConfigBuilder()
-            .withOpenShiftUrl("https://112.74.27.228:8443")
-            .withMasterUrl("https://112.74.27.228:8443")
+            .withOpenShiftUrl(OPENSHIFT_URL)
+            //.withMasterUrl("https://112.74.27.228:8443")
             .withUsername("fandh")
             .withPassword("fan@123")
             .withTrustCerts(true).build();
@@ -34,9 +36,9 @@ public class GetClient {
 
   public static OpenShiftClient getAdminOClient() {
     OpenShiftConfig shiftConfig = new OpenShiftConfigBuilder()
-            .withMasterUrl("https://112.74.27.228:8443")
-            .withUsername("admin")
-            .withPassword("admin@123")
+            .withMasterUrl(OPENSHIFT_URL)
+            .withUsername(OPENSHIFT_ADMIN_USERNAME)
+            .withPassword(OPENSHIFT_ADMIN_PASSWORD)
             .withTrustCerts(true).build();
     return new DefaultOpenShiftClient(shiftConfig);
   }

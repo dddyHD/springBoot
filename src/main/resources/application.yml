@@ -7,9 +7,7 @@ spring:
     active: @spring.active@  # 分区配置
   jackson:
     time-zone: GMT+8
-  liquibase:
-    change-log: classpath:db/changelog-master.yaml
-    check-change-log-location: false
+
 
 log:
   path: D:/Users/admin/IdeaProjects/springBoot/zc-logs
@@ -24,6 +22,16 @@ spring:
     username: root
     password:
 
+  liquibase:
+    change-log: classpath:db/changelog-master.yaml
+    check-change-log-location: false
+
+  ldap:
+    userDnPatterns: uid={0},ou=People
+    groupSearchBase: ou=GROUP
+    url: ldap://172.168.1.119:389/dc=my-domain,dc=com
+
+
 ---
 
 spring:
@@ -33,6 +41,15 @@ spring:
     username: root
     password:
 
+  liquibase:
+    change-log: classpath:db/changelog-master-test.yaml
+    check-change-log-location: false
+
+  ldap:
+    userDnPatterns: uid={0},ou=People
+    groupSearchBase: ou=GROUP
+    url: ldap://172.168.1.119:389/dc=my-domain,dc=com
+
 ---
 
 spring:
@@ -41,4 +58,13 @@ spring:
     url: jdbc:mysql://192.168.99.100:3306/zc_produce?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&createDatabaseIfNotExist=true
     username: root
     password:
+
+  liquibase:
+    change-log: classpath:db/changelog-master.yaml
+    check-change-log-location: false
+
+  ldap:
+    userDnPatterns: uid={0},ou=People
+    groupSearchBase: ou=GROUP
+    url: ldap://172.168.1.119:389/dc=my-domain,dc=com
 

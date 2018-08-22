@@ -49,6 +49,27 @@ databaseChangeLog:
           columns:
           - column:
               name: id
+              value: 4
+          - column:
+              name: username
+              value: user
+          - column:
+              name: password
+              value: ba5ef51294fea5cb4eadea5306f3ca3b # md5 user@123
+          - column:
+              name: email
+              value: user@qq.com
+          - column:
+              name: nickname
+              value: user
+          - column:
+              name: register_time
+              value: now()
+          tableName: user
+      - insert:
+          columns:
+          - column:
+              name: id
               value: 2
           - column:
               name: role_name

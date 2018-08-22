@@ -1,5 +1,7 @@
 package cn.suancloud.springBoot.service;
 
+import java.util.List;
+
 import cn.suancloud.springBoot.model.Permission;
 
 /**
@@ -7,4 +9,5 @@ import cn.suancloud.springBoot.model.Permission;
  */
 public interface PermissionService extends BaseService<Permission,Long>{
   boolean isExistsPermissionName (String permission_name);
+  List<Permission> findByUserId(Long id);
 }

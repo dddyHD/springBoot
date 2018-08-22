@@ -2,6 +2,7 @@ package cn.suancloud.springBoot.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,17 +38,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private CustomUserService customUserService;
 
-//  @Bean
+  @Value("${spring.ldap.userDnPatterns}")
+  private String userDnPatterns;
+  @Value("${spring.ldap.groupSearchBase}")
+  private String groupSearchBase;
+  @Value("${spring.ldap.url}")
+  private String url;
+
+
+  //  @Bean
 //  UserDetailsService customUserService() { //注册UserDetailsService 的bean
 //    return customUserService;
 //  }
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.ldapAuthentication()
+            .userDnPatterns(userDnPatterns)
+           // .groupSearchBase(groupSearchBase)
+            .contextSource()
+            .url(url)
+            .and()
+            .passwordCompare()
+            .passwordEncoder(new MyPasswordEncoder())
+            .passwordAttribute("userPassword");
+    //----------------------------------------------------
     //user Details Service验证
     //auth.userDetailsService(customUserService).passwordEncoder(new BCryptPasswordEncoder());
-    //自定义密码加密
-    auth.userDetailsService(customUserService).passwordEncoder(new MyPasswordEncoder());
+    //自定义密码加密 mysql校验密码
+    //auth.userDetailsService(customUserService).passwordEncoder(new MyPasswordEncoder());
   }
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf()
@@ -68,8 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .addFilter(new JWTLoginFilter(authenticationManager()))
-            .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService));
-
+            .addFilter(new JWTAuthenticationFilter(authenticationManager(), customUserService));
 
 
     http.exceptionHandling()

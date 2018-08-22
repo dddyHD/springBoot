@@ -69,11 +69,18 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                                           FilterChain chain,
                                           Authentication auth) throws IOException, ServletException {
 
+    //ldap 校验
     String token = Jwts.builder()
-            .setSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername())
+            .setSubject(auth.getName())
             .setExpiration(new Date(System.currentTimeMillis() + JWT_TTLMILLIS))
             .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
             .compact();
+    //mysql 校验
+//    String token = Jwts.builder()
+//            .setSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername())
+//            .setExpiration(new Date(System.currentTimeMillis() + JWT_TTLMILLIS))
+//            .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+//            .compact();
     res.addHeader("J_Authorization", "Bearer " + token);
 //    返回到body中
     logger.info("获取token值");

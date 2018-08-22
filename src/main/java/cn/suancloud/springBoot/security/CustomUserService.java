@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.suancloud.springBoot.dao.PermissionDao;
 import cn.suancloud.springBoot.dao.UserDao;
 import cn.suancloud.springBoot.model.Permission;
+import cn.suancloud.springBoot.service.PermissionService;
 
 /**
  * Created by admin on 2018/4/27.
@@ -23,13 +23,13 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
   @Autowired
   UserDao userDao;
   @Autowired
-  PermissionDao permissionDao;
+  PermissionService permissionService;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     cn.suancloud.springBoot.model.User user = userDao.findByUsername(username);
     if (user != null){
-      List<Permission> permissions = permissionDao.findByUserId(user.getId());
+      List<Permission> permissions = permissionService.findByUserId(user.getId());
       List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
       for (Permission permission : permissions) {
         if (permission != null && permission.getPermission_name() != null) {

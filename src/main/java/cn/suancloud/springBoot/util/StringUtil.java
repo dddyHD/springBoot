@@ -23,4 +23,13 @@ public class StringUtil {
     }
     return str;
   }
+
+  /**
+   * 获取系统时间字符串
+   * @return String
+   */
+  public static String getTimeStamp(){
+    return String.valueOf(System.currentTimeMillis());
+  }
+
 }

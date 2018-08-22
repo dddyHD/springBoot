@@ -18,7 +18,7 @@ public class UserForm implements Serializable {
   @Size(min=3,max=20,message = "用户名长度为3~20")
   private String username;
   @NotNull(message = "密码不允许为空")
-  @Size(min=6,max=20,message = "密码长度为6~20")
+  @Size(min=6,max=20,message = "密码长度为6~225")
   private String password;
   @Pattern(regexp = Constant.EMAIL_REGEX,message = "邮箱不合法")
   private String email;
