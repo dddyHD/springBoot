@@ -38,6 +38,14 @@ public class ApplyController extends BaseController {
     data.getData().put("applyList", applyService.findAll());
     return data;
   }
+  //当前用户正在申请的项目
+  @GetMapping("/self")
+  public Object selfApplyProjectList(HttpServletRequest request) {
+    ResponseData data = ResponseData.ok();
+    data.getData().put("applyingList",
+            applyService.getApplying(request.getAttribute("current_user").toString()));
+    return data;
+  }
 
   @PostMapping
   public ResponseData addApply(@Valid @RequestBody ApplyForm form, BindingResult result,
@@ -57,7 +65,7 @@ public class ApplyController extends BaseController {
     } finally {
       adminClient.close();
     }
-    OpenShiftClient oSClient = getOClient();
+    OpenShiftClient oSClient = getOClient(request.getAttribute("current_os_token").toString());
     if (type.equals("dy")) {//订阅操作
       try {
         //判断当前用户是否拥有该项目,没拥有抛出异常

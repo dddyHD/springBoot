@@ -65,6 +65,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
               .getSubject();
       if (user != null) {
         request.setAttribute("current_user",user);
+        request.setAttribute("current_os_token", request.getHeader("authorization")!=null?
+                        request.getHeader("authorization").substring(7):null);
         return new UsernamePasswordAuthenticationToken(user, null,customUserService
                 .loadUserByUsername(user).getAuthorities());
       }

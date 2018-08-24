@@ -12,6 +12,8 @@ import javax.servlet.Servlet;
 
 import cn.suancloud.springBoot.util.proxy.ProxyServlet;
 
+import static cn.suancloud.springBoot.util.Constant.OPENSHIFT_URL;
+
 @Configuration
 public class ProxyConfig {
 
@@ -26,7 +28,7 @@ public class ProxyConfig {
             openShiftServlet(),
             "/oapi/v1/*");
     Map<String, String> params = ImmutableMap.of(
-            "targetUri", "https://112.74.27.228:8443/oapi/v1",
+            "targetUri", OPENSHIFT_URL+"/oapi/v1",
             "log", "true"
     );
     registrationBean.setInitParameters(params);

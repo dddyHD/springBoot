@@ -151,18 +151,17 @@ public abstract class BaseControllerTest {
   }
 
   protected void verifyLogin(String username, String password, ResultMatcher matcher,
-                             ResponseData responseData,boolean strict) throws Exception {
+                             ResponseData responseData, boolean strict) throws Exception {
     mockMvc.perform(post("/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(writeAsString(new User(username, password)))
     )
             .andDo(print())
             .andExpect(matcher)
-            .andExpect(content().json(writeAsString(responseData),strict));
+            .andExpect(content().json(writeAsString(responseData), strict));
 
 
   }
-
 
 
   /**

@@ -24,12 +24,11 @@ public class GetClient {
     return new DefaultKubernetesClient(config);
   }
 
-  public static OpenShiftClient getOClient() {
+  public static OpenShiftClient getOClient(String token) {
     OpenShiftConfig shiftConfig = new OpenShiftConfigBuilder()
+            .withMasterUrl(OPENSHIFT_URL)
             .withOpenShiftUrl(OPENSHIFT_URL)
-            //.withMasterUrl("https://112.74.27.228:8443")
-            .withUsername("fandh")
-            .withPassword("fan@123")
+            .withOauthToken(token)
             .withTrustCerts(true).build();
     return new DefaultOpenShiftClient(shiftConfig);
   }
@@ -44,9 +43,10 @@ public class GetClient {
   }
 
   public static void main(String[] args) {
-    OpenShiftClient client = getOClient();
-    System.out.println(client.namespaces().withName("aa").get());
-    client.close();
+    OpenShiftClient client = getOClient("t9iN-dMutcdxkG8iRk7CzOhh7G-kusFDqzKKcylRVfk");
+    client.namespaces().withName("unittest1").get();
+//    System.out.println(client.namespaces().withName("aa").get());
+//    client.close();
   }
 
 }

@@ -7,3 +7,6 @@ databaseChangeLog:
       file: db/changelog-20180802-user2-test-data.yaml
   - include:
       file: db/changelog-20180802-log-test-data.yaml
+  - include:
+      file: db/changelog-20180823-apply-test-data.yaml
+

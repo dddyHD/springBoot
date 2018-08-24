@@ -52,6 +52,27 @@ databaseChangeLog:
               value: 4
           - column:
               name: username
+              value: noPermission
+          - column:
+              name: password
+              value: ba5ef51294fea5cb4eadea5306f3ca3b # md5 user@123
+          - column:
+              name: email
+              value: user@qq.com
+          - column:
+              name: nickname
+              value: user
+          - column:
+              name: register_time
+              value: now()
+          tableName: user
+      - insert:
+          columns:
+          - column:
+              name: id
+              value: 5
+          - column:
+              name: username
               value: user
           - column:
               name: password
@@ -185,6 +206,15 @@ databaseChangeLog:
           - column:
               name: role_id
               value: 3
+          tableName: user_role
+      - insert:
+          columns:
+          - column:
+              name: user_id
+              value: 5
+          - column:
+              name: role_id
+              value: 1
           tableName: user_role
       - insert:
           columns:

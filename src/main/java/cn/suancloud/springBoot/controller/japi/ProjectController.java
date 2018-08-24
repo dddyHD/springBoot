@@ -36,33 +36,27 @@ public class ProjectController extends BaseController {
 
   //所有项目
   @GetMapping("/all")
-  public Object allProjectList() {
+  public ResponseData allProjectList() {
+    ResponseData data = ResponseData.ok();
     OpenShiftClient oSClient = getAdminOClient();
-    Object result = oSClient.projects().list();
+    data.getData().put("list", oSClient.projects().list());
     oSClient.close();
-    return result;
+    return data;
   }
 
   //当前用户的的项目
   @GetMapping("/self")
-  public Object selfProjectList() {
-    OpenShiftClient oSClient = getOClient();
-    Object result = oSClient.projects().list();
-    oSClient.close();
-    return result;
-  }
-
-  //当前用户正在申请的项目
-  @GetMapping("/apply")
-  public Object selfApplyProjectList(HttpServletRequest request) {
+  public Object selfProjectList(HttpServletRequest request) {
     ResponseData data = ResponseData.ok();
-    data.getData().put("applyingList",
-            applyService.getApplying(request.getAttribute("current_user").toString()));
+    OpenShiftClient oSClient = getOClient(request.getAttribute("current_os_token").toString());
+    data.getData().put("list", oSClient.projects().list());
+    oSClient.close();
     return data;
   }
 
+
   /**
-   * 订阅同意操作 project 申请的项目名, role 用户要添加的角色 ,kind 有User和Group两种 ,name用户名
+   * 订阅同意操作 id 申请的id， project 申请的项目名, role 用户要添加的角色 ,kind 有User和Group两种 ,name用户名
    *
    * @return http status 200 和修改完成的 roleBindings
    */
@@ -106,7 +100,7 @@ public class ProjectController extends BaseController {
       objectReference.setName(form.getName());
       // send out
       DoneableRoleBinding roleBinding;
-      if (request.getRequestURI().contains("subscribe")) {//订阅
+      if (request.getRequestURI().contains("/subscribe/")) {//订阅
         roleBinding = oSClient.roleBindings().inNamespace(form.getProject())
                 .withName(form.getRole()).edit().addToSubjects(objectReference);
         if (form.getKind().equals("User"))
