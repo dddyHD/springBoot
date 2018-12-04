@@ -31,7 +31,7 @@ public class LoginControllerTest extends BaseControllerTest {
    */
   @Test
   public void testLoginHasAllParameter() throws Exception {
-    verifyLogin("admin","admin@123",status().isOk(),ResponseData.ok(),false);
+    verifyLogin("admin","admin",status().isOk(),ResponseData.ok(),false);
   }
 
   /**

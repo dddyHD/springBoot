@@ -183,7 +183,7 @@ public class LdapUtil {
 
   public static void main(String[] args) {
     //LdapUtil.getLoginContext();
-    System.out.println(LdapUtil.addUserLdap("user", Encryption.getMD5("user@123")));
+    System.out.println(LdapUtil.addUserLdap("admin", Encryption.getMD5("admin")));
     //changePassword("ldapuser3", "min");
     //deleteUser("ldapuser3");
 //    LdapUtil.updatePasswordLdap("10000", "1234567");

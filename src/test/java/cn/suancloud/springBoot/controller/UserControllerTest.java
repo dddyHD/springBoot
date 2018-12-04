@@ -44,7 +44,7 @@ public class UserControllerTest extends BaseControllerTest {
   public void testEditUser() throws Exception {
     User user = new User();
     user.setUsername("admin");
-    user.setPassword("12345678");
+    user.setPassword("admin");
     user.setEmail("heng@qq.com");
     user.setNickname("min");
     testWithParameter("/4",PUT,user,ResponseData.ok(),true);

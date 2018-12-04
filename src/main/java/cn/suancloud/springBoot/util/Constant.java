@@ -15,15 +15,15 @@ public abstract class Constant {
   public static final Long JWT_TTLMILLIS = Long.valueOf(1000 * 60 * 60 * 24);
   public static final String JWT_SECRET = "SpringBoot";
 
-  public static final String OPENSHIFT_URL = "https://112.74.27.228:8443";
+  public static final String OPENSHIFT_URL = "https://172.168.1.35:8443";
   public static final String OPENSHIFT_ADMIN_USERNAME = "admin";
-  public static final String OPENSHIFT_ADMIN_PASSWORD = "admin@123";
+  public static final String OPENSHIFT_ADMIN_PASSWORD = "admin";
 
 
-  public static final String LDAP_URL = "ldap://172.168.1.119:389";
+  public static final String LDAP_URL = "ldap://172.168.1.28:389";
   public static final String LDAP_FACTORY = "com.sun.jndi.ldap.LdapCtxFactory";
   public static final String LDAP_USERNAME = "cn=Manager,dc=my-domain,dc=com";
-  public static final String LDAP_PASSWORD = "root";
+  public static final String LDAP_PASSWORD = "123456";
   public static final String SECURITY_AUTHENTICATION ="simple";
   public static final String LDAP_BASE_DN = "ou=People,dc=my-domain,dc=com";
 

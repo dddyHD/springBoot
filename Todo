@@ -11,5 +11,6 @@
 1、我这边用户系统如何与它对接
 2、我这边需要个超级用户的的账号和密码 保存在哪里？ getAdminOClient
 3、因为要模拟登录openshift后台 账号密码保存是否要明文？
+4、暂时未完成ProjectController的测试！
 
 

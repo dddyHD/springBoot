@@ -56,7 +56,7 @@ public abstract class BaseControllerTest {
   protected void login() {
     if (StringUtils.isEmpty(token) || StringUtils.isEmpty(openshift_token))
       try {
-        doJavaJwtLogin("admin", "admin@123");
+        doJavaJwtLogin("admin", "admin");
       } catch (Exception e) {
         System.out.println("登录错误！");
         e.printStackTrace();
